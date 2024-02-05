@@ -28,5 +28,5 @@ async function handleSignOut(): Promise<ActionResult> {
         sessionCookie.value,
         sessionCookie.attributes
     );
-    return redirect("/login");
+    return redirect("/signin");
 }
