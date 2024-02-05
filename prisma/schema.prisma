@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String            @id
+  email           String            @unique
+  handle          String            @unique
+  role            UserRole          @default(USER)
+  hashedPassword  String
+  sessions        Session[]
+  comments        Comment[]
+  readingProgress ReadingProgress[]
+  authorOf        Story[]
+  list            UserList[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Story {
+  id              String            @id @default(uuid())
+  name            String
+  description     String?
+  genre           Genre             @relation(fields: [genreId], references: [id])
+  genreId         Int
+  chapters        Chapter[]
+  comments        Comment[]
+  readingProgress ReadingProgress[]
+  storyInsights   StoryInsight[]
+  author          User              @relation(fields: [authorId], references: [id])
+  authorId        String
+  userLists       UserList[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Genre {
+  id      Int     @id @default(autoincrement())
+  name    String  @unique
+  stories Story[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Chapter {
+  id              String            @id @default(uuid())
+  descriptor      String
+  name            String
+  content         String
+  story           Story             @relation(fields: [storyId], references: [id])
+  storyId         String
+  comments        Comment[]
+  readingProgress ReadingProgress[]
+  storyInsight    StoryInsight[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([id, descriptor])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  story     Story    @relation(fields: [storyId], references: [id])
+  storyId   String
+  chapter   Chapter? @relation(fields: [chapterId], references: [id])
+  chapterId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ReadingProgress {
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  story     Story   @relation(fields: [storyId], references: [id])
+  storyId   String
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapterId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, storyId])
+}
+
+model StoryInsight {
+  story     Story    @relation(fields: [storyId], references: [id])
+  storyId   String
+  chapter   Chapter? @relation(fields: [chapterId], references: [id])
+  chapterId String   @default("")
+  trigger   String
+  content   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([storyId, trigger, chapterId])
+}
+
+model UserList {
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  story   Story  @relation(fields: [storyId], references: [id])
+  storyId String
+
+  @@id([userId, storyId])
+}
