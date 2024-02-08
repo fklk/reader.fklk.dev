@@ -2,11 +2,21 @@ import { lucia, validateRequest } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { ActionResult } from "@/app/_components/form";
+import { Button } from "@/app/_components/ui/button";
 
-export default async function SignOutButton() {
+export default async function SignOutButton({
+    className,
+}: {
+    className?: string;
+}) {
     return (
         <form action={handleSignOut}>
-            <button>Sign out</button>
+            <Button
+                variant="secondary"
+                className={className}
+            >
+                Sign out
+            </Button>
         </form>
     );
 }

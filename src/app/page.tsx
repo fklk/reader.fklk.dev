@@ -10,11 +10,15 @@ import {
     FolderKanbanIcon,
     ChevronLeftIcon,
 } from "lucide-react";
+import { validateRequest } from "@/lib/auth";
+import SignOutButton from "./(auth)/_components/sign-out";
 
 export default async function LandingPage() {
+    const { session } = await validateRequest();
+
     return (
         <div className="flex items-center w-full justify-between">
-            <div className="flex flex-col gap-28">
+            <div className="flex flex-col gap-28 md:gap-14">
                 <FklkIcon
                     width={75}
                     height={75}
@@ -37,22 +41,38 @@ export default async function LandingPage() {
                     </div>
                 </div>
                 <div className="flex gap-4 items-center ">
-                    <Link href="/signin">
-                        <Button
-                            className="text-3xl py-7 px-4"
-                            variant="default"
-                        >
-                            Sign in
-                        </Button>
-                    </Link>
-                    <Link href="/signup">
-                        <Button
-                            className="text-3xl py-7 px-4"
-                            variant="outline"
-                        >
-                            Sign up
-                        </Button>
-                    </Link>
+                    {session ? (
+                        <>
+                            <Link href="/home">
+                                <Button
+                                    className="text-3xl py-7 px-4"
+                                    variant="default"
+                                >
+                                    Home
+                                </Button>
+                            </Link>
+                            <SignOutButton className="text-3xl py-7 px-4"/>
+                        </>
+                    ) : (
+                        <>
+                            <Link href="/signin">
+                                <Button
+                                    className="text-3xl py-7 px-4"
+                                    variant="default"
+                                >
+                                    Sign in
+                                </Button>
+                            </Link>
+                            <Link href="/signup">
+                                <Button
+                                    className="text-3xl py-7 px-4"
+                                    variant="outline"
+                                >
+                                    Sign up
+                                </Button>
+                            </Link>
+                        </>
+                    )}
                 </div>
             </div>
             <div className="flex flex-col gap-5 text-3xl font-medium text-center">

@@ -5,48 +5,93 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Argon2id } from "oslo/password";
 import { ActionResult, Form } from "../../_components/form";
+import { FklkIcon } from "@/app/_components/icon";
+import { Label } from "@/app/_components/ui/label";
+import { Input } from "@/app/_components/ui/input";
+import { Button } from "@/app/_components/ui/button";
+import Link from "next/link";
 
 export default async function SignUpPage() {
     return (
-        <>
-            <h1>Sign up</h1>
+        <div className="flex flex-col justify-center items-center gap-4">
             <Form
-                className="flex flex-col gap-4"
+                className="flex flex-col gap-4 bg-secondary py-4 px-12 rounded-lg shadow-lg"
                 action={handleSignUp}
             >
-                <div className="flex gap-4">
-                    <label htmlFor="email">Email</label>
-                    <input
-                        className="border border-black rounded-md"
+                <div className="flex flex-col gap-2">
+                    <FklkIcon
+                        width={50}
+                        height={50}
+                    />
+                    <h1 className="text-3xl font-bold">Sign up</h1>
+                </div>
+                <div className="flex flex-col gap-1">
+                    <Label
+                        className="text-md"
+                        htmlFor="email"
+                    >
+                        Email
+                    </Label>
+                    <Input
                         type="email"
-                        name="email"
                         id="email"
+                        name="email"
+                        className="w-80"
                     />
                 </div>
-                <div className="flex gap-4">
-                    <label htmlFor="handle">Handle</label>
-                    <input
-                        className="border border-black rounded-md"
+                <div className="flex flex-col gap-1">
+                    <Label
+                        className="text-md"
+                        htmlFor="handle"
+                    >
+                        Handle
+                    </Label>
+                    <Input
                         type="text"
-                        name="handle"
                         id="handle"
+                        name="handle"
+                        className="w-80"
                     />
                 </div>
-                <div className="flex gap-4">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        className="border border-black rounded-md"
+                <div className="flex flex-col gap-1">
+                    <Label
+                        className="text-md"
+                        htmlFor="password"
+                    >
+                        Password
+                    </Label>
+                    <Input
                         type="password"
                         name="password"
                         id="password"
+                        className="w-80"
                     />
                 </div>
-                <br />
-                <button className="bg-sky-600 w-fit rounded-lg py-2 px-4 text-xl">
-                    Sign up
-                </button>
+                <div className="flex flex-col gap-1">
+                    <Label
+                        className="text-md"
+                        htmlFor="repeatedPassword"
+                    >
+                        Repeat Password
+                    </Label>
+                    <Input
+                        type="password"
+                        name="repeatedPassword"
+                        id="repeatedPassword"
+                        className="w-80"
+                    />
+                </div>
+                <Button>Sign up</Button>
+                <div className="mt-4 text-sm flex items-center flex-col gap-2 pb-2">
+                    <Link
+                        className="hover:underline underline-offset-4 text-primary"
+                        href="/signin"
+                    >
+                        Already have an account?
+                    </Link>
+                </div>
             </Form>
-        </>
+        </div>
     );
 }
 
@@ -74,6 +119,14 @@ async function handleSignUp(_: any, formData: FormData): Promise<ActionResult> {
     if (password.length < 5) {
         return {
             error: "Invalid password",
+        };
+    }
+
+    const repeatedPassword = formData.get("repeatedPassword") as string;
+
+    if (password !== repeatedPassword) {
+        return {
+            error: "Passwords do not match",
         };
     }
 

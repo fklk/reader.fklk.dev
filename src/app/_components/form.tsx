@@ -1,5 +1,6 @@
 "use client";
 
+import { XCircleIcon } from "lucide-react";
 import { useFormState } from "react-dom";
 
 export function Form({
@@ -19,7 +20,15 @@ export function Form({
             action={formAction}
             className={className}
         >
-            <p>{state.error}</p>
+            {state.error ? (
+                <div className="py-2 px-4 w-full rounded-md justify-center gap-1 flex flex-col place-self-center bg-destructive/20 border border-destructive">
+                    <div className="flex gap-2 items-center">
+                        <XCircleIcon className="justify-self-start w-5 h-5 text-destructive" />
+                        <h2 className="font-bold text-destructive">Error</h2>
+                    </div>
+                    {state.error}
+                </div>
+            ) : null}
             {children}
         </form>
     );
