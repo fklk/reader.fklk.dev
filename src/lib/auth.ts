@@ -43,13 +43,13 @@ export const validateRequest = cache(
         { user: User; session: Session } | { user: null; session: null }
     > => {
         const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+
         if (!sessionId) {
             return {
                 user: null,
                 session: null,
             };
         }
-
         const result = await lucia.validateSession(sessionId);
         try {
             if (result.session && result.session.fresh) {
@@ -76,7 +76,7 @@ export const validateRequest = cache(
 );
 
 export const getUser = cache(async () => {
-    const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+    const sessionId = cookies().get(SESSION_COOKIE_NAME)?.value ?? null;
     if (!sessionId) return null;
     const { user, session } = await lucia.validateSession(sessionId);
     try {

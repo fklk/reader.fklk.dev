@@ -1,9 +1,5 @@
-import {
-    createTRPCRouter,
-    privateProcedure,
-    publicProcedure,
-} from "@/server/api/trpc";
-import { lucia } from "@/lib/auth";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { getUser, lucia, validateRequest } from "@/lib/auth";
 import { z } from "zod";
 
 export const sessionRouter = createTRPCRouter({
@@ -13,4 +9,8 @@ export const sessionRouter = createTRPCRouter({
             const { session } = await lucia.validateSession(input.sessionId);
             return session;
         }),
+
+    getUser: publicProcedure.query(async () => {
+        return await getUser();
+    }),
 });
