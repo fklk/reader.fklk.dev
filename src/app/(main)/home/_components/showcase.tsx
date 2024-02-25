@@ -17,6 +17,7 @@ export default function Showcase() {
         loop: true,
     };
 
+    // TODO: Set showcase in admin panel
     const showcaseImages = [
         { path: "/showcase/showcase_1.jpg", name: "The Swordmaster" },
         { path: "/showcase/showcase_2.jpg", name: "A Mage's Tale" },
