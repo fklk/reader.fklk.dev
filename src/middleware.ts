@@ -13,12 +13,21 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
         return NextResponse.redirect(new URL("/signin", req.url));
     }
 
-    const session = await api.session.validate.query({
+    const { user, session } = await api.session.validate.query({
         sessionId: authCookie.value,
     });
 
     if (!session) {
         return NextResponse.redirect(new URL("/signin", req.url));
+    }
+
+    if (isAdminRoute(req.nextUrl.pathname)) {
+        if (user.role !== "ADMIN") {
+            return NextResponse.json(
+                { error: "UNAUTHORIZED" },
+                { status: 401 }
+            );
+        }
     }
 
     return NextResponse.next();
@@ -37,4 +46,8 @@ const isProtectedRoute = (pathname: string): boolean => {
         return false;
     }
     return true;
+};
+
+const isAdminRoute = (pathname: string): boolean => {
+    return pathname === "/site-settings";
 };
