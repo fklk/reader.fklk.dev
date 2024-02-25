@@ -8,16 +8,19 @@ datasource db {
 }
 
 model User {
-  id              String            @id
-  email           String            @unique
-  handle          String            @unique
-  role            UserRole          @default(USER)
-  hashedPassword  String
-  sessions        Session[]
-  comments        Comment[]
-  readingProgress ReadingProgress[]
-  authorOf        Story[]
-  list            UserList[]
+  id                 String                  @id
+  email              String                  @unique
+  handle             String                  @unique
+  role               UserRole                @default(USER)
+  hashedPassword     String
+  sessions           Session[]
+  comments           Comment[]
+  readingProgress    ReadingProgress[]
+  authorOf           Novel[]
+  list               UserList[]
+  settings           UserSettings[]
+  customInsights     CustomNovelInsight[]
+  novelInsightStates UserNovelInsightState[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -38,28 +41,41 @@ model Session {
   updatedAt DateTime @updatedAt
 }
 
-model Story {
-  id              String            @id @default(uuid())
-  name            String
-  description     String?
-  genre           Genre             @relation(fields: [genreId], references: [id])
-  genreId         Int
-  chapters        Chapter[]
-  comments        Comment[]
-  readingProgress ReadingProgress[]
-  storyInsights   StoryInsight[]
-  author          User              @relation(fields: [authorId], references: [id])
-  authorId        String
-  userLists       UserList[]
+model Novel {
+  id                String                  @id @default(uuid())
+  name              String
+  description       String
+  status            NovelStatus             @default(ANNOUNCED)
+  imgPath           String                  @default("/novel_placeholder.jpg")
+  genre             Genre                   @relation(fields: [genreId], references: [id])
+  genreId           Int
+  chapters          Chapter[]
+  comments          Comment[]
+  readingProgress   ReadingProgress[]
+  novelInsights     NovelInsight[]
+  author            User                    @relation(fields: [authorId], references: [id])
+  authorId          String
+  userLists         UserList[]
+  views             Int                     @default(0)
+  customInsights    CustomNovelInsight[]
+  userInsightStates UserNovelInsightState[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+enum NovelStatus {
+  ANNOUNCED
+  ONGOING
+  PAUSED
+  FINISHED
+  DISCONTINUED
+}
+
 model Genre {
-  id      Int     @id @default(autoincrement())
-  name    String  @unique
-  stories Story[]
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  novels Novel[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -67,14 +83,14 @@ model Genre {
 
 model Chapter {
   id              String            @id @default(uuid())
-  descriptor      String
+  descriptor      Int
   name            String
   content         String
-  story           Story             @relation(fields: [storyId], references: [id])
-  storyId         String
+  novel           Novel             @relation(fields: [novelId], references: [id])
+  novelId         String
   comments        Comment[]
   readingProgress ReadingProgress[]
-  storyInsight    StoryInsight[]
+  novelInsight    NovelInsight[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -87,8 +103,8 @@ model Comment {
   content   String
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
-  story     Story    @relation(fields: [storyId], references: [id])
-  storyId   String
+  novel     Novel    @relation(fields: [novelId], references: [id])
+  novelId   String
   chapter   Chapter? @relation(fields: [chapterId], references: [id])
   chapterId String?
 
@@ -99,36 +115,78 @@ model Comment {
 model ReadingProgress {
   user      User    @relation(fields: [userId], references: [id])
   userId    String
-  story     Story   @relation(fields: [storyId], references: [id])
-  storyId   String
+  novel     Novel   @relation(fields: [novelId], references: [id])
+  novelId   String
   chapter   Chapter @relation(fields: [chapterId], references: [id])
   chapterId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@id([userId, storyId])
+  @@id([userId, novelId, chapterId])
 }
 
-model StoryInsight {
-  story     Story    @relation(fields: [storyId], references: [id])
-  storyId   String
+model NovelInsight {
+  novel     Novel    @relation(fields: [novelId], references: [id])
+  novelId   String
   chapter   Chapter? @relation(fields: [chapterId], references: [id])
-  chapterId String   @default("")
+  chapterId String
   trigger   String
   content   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@id([storyId, trigger, chapterId])
+  @@id([novelId, trigger, chapterId])
+}
+
+model CustomNovelInsight {
+  novel   Novel  @relation(fields: [novelId], references: [id])
+  novelId String
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  trigger String
+  content String
+
+  @@id([novelId, userId, trigger])
 }
 
 model UserList {
   user    User   @relation(fields: [userId], references: [id])
   userId  String
-  story   Story  @relation(fields: [storyId], references: [id])
-  storyId String
+  novel   Novel  @relation(fields: [novelId], references: [id])
+  novelId String
 
-  @@id([userId, storyId])
+  @@id([userId, novelId])
+}
+
+model UserSettings {
+  user    User        @relation(fields: [userId], references: [id])
+  userId  String
+  setting UserSetting
+  value   String
+
+  @@id([userId, setting])
+}
+
+enum UserSetting {
+  FONT_SIZE
+  FONT_FAMILY
+  LINE_HEIGHT
+}
+
+model UserNovelInsightState {
+  user     User                 @relation(fields: [userId], references: [id])
+  userId   String
+  novel    Novel                @relation(fields: [novelId], references: [id])
+  novelId  String
+  category InsightStateCategory
+  isActive Boolean
+
+  @@id([userId, novelId, category])
+}
+
+enum InsightStateCategory {
+  DEFAULT
+  CUSTOM
 }
