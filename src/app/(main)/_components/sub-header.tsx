@@ -8,9 +8,35 @@ import {
 import Link from "next/link";
 import { ReadrIcon } from "@/app/_components/icon";
 import { Button } from "@/app/_components/ui/button";
-import { SearchIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import {
+    ArrowBigUpDashIcon,
+    MoonIcon,
+    SearchIcon,
+    SettingsIcon,
+} from "lucide-react";
+import {
+    KeyboardEvent as React_KeyboardEvent,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { Input } from "@/app/_components/ui/input";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuTrigger,
+} from "@/app/_components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
+import { api } from "@/trpc/react";
+import { handleSignOut } from "@/lib/actions";
+import {
+    Dialog,
+    DialogContent,
+    DialogTrigger,
+} from "@/app/_components/ui/dialog";
 
 type SubHeaderProps = {
     userHandle: string;
@@ -19,7 +45,13 @@ type SubHeaderProps = {
 export default function SubHeader(props: SubHeaderProps) {
     const [showSearch, setShowSearch] = useState<boolean>(false);
     const searchRef = useRef<HTMLDivElement>(null);
+    const searchInputRef = useRef<HTMLInputElement>(null);
     const searchOpenRef = useRef<HTMLButtonElement>(null);
+
+    //
+    const role = api.session.getUser.useQuery().data?.role;
+
+    const router = useRouter();
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -36,41 +68,90 @@ export default function SubHeader(props: SubHeaderProps) {
             // because it would otherwise interfere with the code above
             if (searchOpenRef.current?.contains(event.target as Node)) {
                 setShowSearch(true);
+                setTimeout(() => {
+                    searchInputRef.current?.focus();
+                }, 100);
+            }
+        }
+
+        function handleShowSearchShortcut(event: KeyboardEvent) {
+            if (event.key === "S" && event.ctrlKey && event.shiftKey) {
+                setShowSearch(!showSearch);
+                setTimeout(() => {
+                    searchInputRef.current?.focus();
+                }, 100);
+            }
+        }
+
+        function handleHideSearchShortcut(event: KeyboardEvent) {
+            if (event.key === "Escape") {
+                setShowSearch(false);
             }
         }
 
         document.addEventListener("click", handleClickOutside);
+        document.addEventListener("keydown", handleShowSearchShortcut);
+        document.addEventListener("keydown", handleHideSearchShortcut);
         return () => {
             document.removeEventListener("click", handleClickOutside);
+            document.removeEventListener("keydown", handleShowSearchShortcut);
+            document.removeEventListener("keydown", handleHideSearchShortcut);
         };
     }, []);
+
+    const handleSearch = (e: React_KeyboardEvent<HTMLInputElement>) => {
+        if (
+            e.key === "Enter" &&
+            showSearch &&
+            e.currentTarget.value.trim().length > 0
+        ) {
+            router.push(
+                `/search?q=${encodeURIComponent(e.currentTarget.value)}`
+            );
+            setShowSearch(false);
+        }
+    };
 
     return (
         <>
             <div className="flex items-center">
-                <ReadrIcon
-                    height={32}
-                    width={32}
-                />
+                <Link href="/home">
+                    <ReadrIcon
+                        height={32}
+                        width={32}
+                    />
+                </Link>
                 {showSearch ? null : (
                     <div className="ml-8 flex gap-4 text-md">
                         <Link
                             className="font-medium hover:underline underline-offset-4"
-                            href=""
+                            href="/home"
                         >
                             Home
                         </Link>
                         <Link
                             className="font-medium hover:underline underline-offset-4"
-                            href=""
+                            href="/browse"
                         >
                             Browse
                         </Link>
                         <Link
                             className="font-medium hover:underline underline-offset-4"
-                            href=""
+                            href="/popular"
                         >
                             Popular
+                        </Link>
+                        <Link
+                            className="font-medium hover:underline underline-offset-4"
+                            href="/favorites"
+                        >
+                            Favorites
+                        </Link>
+                        <Link
+                            className="font-medium hover:underline underline-offset-4"
+                            href="/insights"
+                        >
+                            Insights
                         </Link>
                     </div>
                 )}
@@ -83,28 +164,97 @@ export default function SubHeader(props: SubHeaderProps) {
                     >
                         <SearchIcon className="h-5 w-5" />
                         <Input
+                            ref={searchInputRef}
                             placeholder="Search novels..."
                             className="text-md border-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                            onKeyDown={e => handleSearch(e)}
                         />
                     </div>
                 ) : null}
             </>
-            <div className="flex gap-6 items-center">
+            <div className="flex gap-3 items-center">
                 {showSearch ? null : (
-                    <Button
-                        size="icon"
-                        ref={searchOpenRef}
-                        variant="ghost"
-                    >
-                        <SearchIcon className="w-5 h-5" />
-                    </Button>
+                    <Link href="/publish">
+                        <Button className="flex gap-1 items-center">
+                            <ArrowBigUpDashIcon className="w-5 h-5" />
+                            Publish
+                        </Button>
+                    </Link>
                 )}
-                <Avatar className="ring-border ring-1 ring-offset-1 ring-offset-background h-8 w-8">
-                    <AvatarImage src="https://avatars.githubusercontent.com/u/85395498?v=4" />
-                    <AvatarFallback>
-                        {props.userHandle.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                </Avatar>
+                <div className="flex gap-1">
+                    {showSearch ? null : (
+                        <>
+                            <Button
+                                size="icon"
+                                ref={searchOpenRef}
+                                variant="ghost"
+                            >
+                                <SearchIcon className="w-5 h-5" />
+                            </Button>
+                            <Dialog modal={false}>
+                                <DialogTrigger asChild>
+                                    <Button
+                                        size="icon"
+                                        variant="ghost"
+                                    >
+                                        <SettingsIcon className="w-5 h-5" />
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent></DialogContent>
+                            </Dialog>
+                            <Button
+                                size="icon"
+                                variant="ghost"
+                            >
+                                <MoonIcon className="w-5 h-5" />
+                            </Button>
+                        </>
+                    )}
+                </div>
+                <DropdownMenu modal={false}>
+                    <DropdownMenuTrigger>
+                        <Avatar className="ring-border ring-1 ring-offset-1 ring-offset-background h-8 w-8">
+                            <AvatarImage src="https://avatars.githubusercontent.com/u/85395498?v=4" />
+                            <AvatarFallback>
+                                {props.userHandle.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                        </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem>
+                            Profile
+                            <DropdownMenuShortcut>
+                                ^&#8679;P
+                            </DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                        {role === "ADMIN" ? (
+                            <Link href="/site-settings">
+                                <DropdownMenuItem className="flex gap-2">
+                                    Site settings
+                                    <DropdownMenuShortcut>
+                                        ^&#8679;A
+                                    </DropdownMenuShortcut>
+                                </DropdownMenuItem>
+                            </Link>
+                        ) : null}
+                        <Link href="/novel/me">
+                            <DropdownMenuItem className="flex gap-2">
+                                My novels
+                            </DropdownMenuItem>
+                        </Link>
+                        <DropdownMenuItem className="flex gap-2">
+                            {/* TODO: Show modal with all shortcuts (search, porfile, settings) */}
+                            Shortcuts
+                            <DropdownMenuShortcut>
+                                ^&#8679;#
+                            </DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => handleSignOut()}>
+                            Sign out
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
         </>
     );
