@@ -3,11 +3,14 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "../../lib/db";
-import { validateRequest } from "@/lib/auth";
+import { getUser, validateRequest } from "@/lib/auth";
 
 export const createTRPCContext = async (opts: { headers?: Headers }) => {
+    const user = await getUser();
+
     return {
         db,
+        user,
         ...opts,
     };
 };
@@ -52,8 +55,4 @@ export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const publicProcedure = t.procedure;
 export const privateProcedure = t.procedure.use(isAuthenticated);
-// TODO: Used for admin panel (make panel only availabel for admin users)
-// - add genres
-// - delete comments
-// - ...
 export const adminProcedure = t.procedure.use(isAdmin);

@@ -5,9 +5,8 @@ import { type AppRouter } from "@/server/api/root";
 
 export const transformer = superjson;
 
-function getBaseUrl() {
-    if (typeof window !== "undefined") return "";
-    if (process.env.NODE_ENV === "production") return "https://fklk.dev";
+export function getBaseUrl() {
+    if (process.env.NODE_ENV === "production") return "https://readr.fklk.dev";
     return `http://localhost:${process.env.PORT ?? 3000}`;
 }
 
