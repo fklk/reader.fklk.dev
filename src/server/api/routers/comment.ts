@@ -17,19 +17,22 @@ export const commentRouter = createTRPCRouter({
             });
         }),
 
-    getForStory: privateProcedure
-        .input(z.object({ storyId: z.string() }))
+    getForNovel: privateProcedure
+        .input(z.object({ novelId: z.string() }))
         .query(async ({ ctx, input }) => {
             return await ctx.db.comment.findMany({
                 where: {
                     AND: [
                         {
-                            storyId: input.storyId,
+                            novelId: input.novelId,
                         },
                         {
                             chapter: null,
                         },
                     ],
+                },
+                orderBy: {
+                    createdAt: "desc",
                 },
             });
         }),
@@ -44,25 +47,24 @@ export const commentRouter = createTRPCRouter({
             });
         }),
 
-    createOnStory: privateProcedure
+    createOnNovel: privateProcedure
         .input(
             z.object({
-                storyId: z.string(),
-                authorId: z.string(),
+                novelId: z.string(),
                 content: z.string(),
             })
         )
         .mutation(async ({ ctx, input }) => {
             return await ctx.db.comment.create({
                 data: {
-                    story: {
+                    novel: {
                         connect: {
-                            id: input.storyId,
+                            id: input.novelId,
                         },
                     },
                     author: {
                         connect: {
-                            id: input.authorId,
+                            id: ctx.user!.id,
                         },
                     },
                     content: input.content,
@@ -84,7 +86,7 @@ export const commentRouter = createTRPCRouter({
                     id: input.chapterId,
                 },
                 select: {
-                    storyId: true,
+                    novelId: true,
                 },
             });
 
@@ -97,9 +99,9 @@ export const commentRouter = createTRPCRouter({
 
             return await ctx.db.comment.create({
                 data: {
-                    story: {
+                    novel: {
                         connect: {
-                            id: chapter.storyId,
+                            id: chapter.novelId,
                         },
                     },
                     chapter: {
