@@ -1,74 +1,83 @@
+import { Badge } from "@/app/_components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
+import { formatDuration } from "@/lib/utils";
+import { api } from "@/trpc/server";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function NovelCard() {
-    // TODO: Add props to comp and implement respective data in card below
-    // TODO: Change chapter color to muted if user has read the chapter
+type NovelCardProps = {
+    novelId: string;
+    redirectTo: "NOVEL_PAGE" | "EDIT_PAGE";
+};
+
+export default async function NovelCard(props: NovelCardProps) {
+    const novel = await api.novel.getById.query({ id: props.novelId });
+    const chapters = await api.chapter.getAll.query({
+        novelId: props.novelId,
+        limit: 4,
+    });
+
+    const redirectUrl = `/novel/${props.novelId}${
+        props.redirectTo === "EDIT_PAGE" ? "/edit" : ""
+    }`;
+
     return (
-        <Card className="min-w-72 border-2 border-transparent hover:border-primary cursor-pointer">
-            <Link href="/novel/{id}">
+        <Card className="min-w-72 ring-2 h-fit ring-transparent hover:ring-primary cursor-pointer ring-offset-4 ring-offset-background">
+            <Link href={redirectUrl}>
                 <CardHeader className="bg-secondary font-bold py-3 rounded-t-lg">
-                    From Downtown
+                    {novel?.name}
                 </CardHeader>
             </Link>
             <CardContent className="p-0 flex h-36 items-center">
                 <div className="h-full w-24 rounded-bl-md overflow-hidden relative">
-                    <Link href="/novel/{id}">
+                    <Link href={redirectUrl}>
                         <Image
-                            src="/showcase/showcase_4.jpg"
+                            src={novel?.imgPath!}
                             alt="Cover image"
                             fill
                             className="object-cover"
                         />
                     </Link>
                 </div>
-                <ul className="flex flex-col gap-1 flew-grow items-center font-medium [&>li]:w-fit [&>li]:px-2">
-                    <li className="flex gap-4 items-center">
-                        <Link
-                            href="/novel/{id}/{chapterId}"
-                            className="hover:bg-accent cursor-pointer py-1 px-2 rounded-md"
-                        >
-                            Chapter 4
-                        </Link>
-                        <span className="text-muted-foreground font-normal text-sm">
-                            2h ago
-                        </span>
-                    </li>
-                    <li className="flex gap-4 items-center">
-                        <Link
-                            href="/novel/{id}/{chapterId}"
-                            className="hover:bg-accent cursor-pointer py-1 px-2 rounded-md"
-                        >
-                            Chapter 3
-                        </Link>
-                        <span className="text-muted-foreground font-normal text-sm">
-                            1w ago
-                        </span>
-                    </li>
-                    <li className="flex gap-4 items-center">
-                        <Link
-                            href="/novel/{id}/{chapterId}"
-                            className="hover:bg-accent cursor-pointer py-1 px-2 rounded-md"
-                        >
-                            Chapter 2
-                        </Link>
-                        <span className="text-muted-foreground font-normal text-sm">
-                            2w ago
-                        </span>
-                    </li>
-                    <li className="flex gap-4 items-center">
-                        <Link
-                            href="/novel/{id}/{chapterId}"
-                            className="hover:bg-accent cursor-pointer py-1 px-2 rounded-md"
-                        >
-                            Chapter 4
-                        </Link>
-                        <span className="text-muted-foreground font-normal text-sm">
-                            3w ago
-                        </span>
-                    </li>
-                </ul>
+                {chapters.length > 0 ? (
+                    <table className="flex-grow h-full">
+                        <tbody className="flex flex-col gap-2 py-2 h-full font-medium">
+                            {chapters.map(ch => (
+                                <tr
+                                    className="flex items-center justify-center"
+                                    key={ch.id}
+                                >
+                                    <td>
+                                        <Link
+                                            href={`/novel/${props.novelId}/chapter/${ch.id}`}
+                                            className="hover:bg-accent cursor-pointer py-1 px-2 rounded-md"
+                                        >
+                                            Chapter {ch.descriptor}
+                                        </Link>
+                                    </td>
+                                    <td className="font-normal text-sm min-w-20 text-center">
+                                        {formatDuration(ch.createdAt)}
+                                    </td>
+                                    {/* <td className="text-center min-w-12">
+                                    {props.unreadChapters
+                                        .filter(
+                                            c => c.descriptor > ch.descriptor
+                                        )
+                                        .map(c => c.id)
+                                        .includes(ch.id) ? (
+                                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                                    ) : null}
+                                </td> */}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                ) : null}
+                {chapters.length === 0 ? (
+                    <h5 className="text-sm text-muted-foreground mx-auto">
+                        No chapters yet
+                    </h5>
+                ) : null}
             </CardContent>
         </Card>
     );
