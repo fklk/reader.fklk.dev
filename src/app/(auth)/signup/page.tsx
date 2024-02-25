@@ -10,12 +10,13 @@ import { Label } from "@/app/_components/ui/label";
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
 import Link from "next/link";
+import { handleSignUp } from "@/lib/actions";
 
 export default async function SignUpPage() {
     return (
         <div className="flex flex-col justify-center items-center gap-4">
             <Form
-                className="flex flex-col gap-4 bg-secondary py-4 px-12 rounded-lg shadow-lg"
+                className="flex flex-col gap-4 bg-gray-200 py-4 px-12 rounded-lg shadow-lg"
                 action={handleSignUp}
             >
                 <div className="flex flex-col gap-2">
@@ -93,85 +94,4 @@ export default async function SignUpPage() {
             </Form>
         </div>
     );
-}
-
-async function handleSignUp(_: any, formData: FormData): Promise<ActionResult> {
-    "use server";
-
-    const email = formData.get("email") as string;
-    // TODO: Verify email conditions with zod (?)
-    if (email.length < 4) {
-        return {
-            error: "Invalid email",
-        };
-    }
-
-    const handle = formData.get("handle") as string;
-    // TODO: Verify handle conditions with zod (?)
-    if (handle.length < 4) {
-        return {
-            error: "Invalid handle",
-        };
-    }
-
-    const password = formData.get("password") as string;
-    // TODO: Verify password conditions with zod (?)
-    if (password.length < 5) {
-        return {
-            error: "Invalid password",
-        };
-    }
-
-    const repeatedPassword = formData.get("repeatedPassword") as string;
-
-    if (password !== repeatedPassword) {
-        return {
-            error: "Passwords do not match",
-        };
-    }
-
-    const isEmailTaken = await db.user.findUnique({
-        where: {
-            email: email,
-        },
-    });
-
-    if (isEmailTaken) {
-        return {
-            error: "Email is already in use",
-        };
-    }
-
-    const isHandleTaken = await db.user.findUnique({
-        where: {
-            handle: handle,
-        },
-    });
-
-    if (isHandleTaken) {
-        return {
-            error: "Handle is already in use",
-        };
-    }
-
-    const hashedPassword = await new Argon2id().hash(password);
-    const userId = generateId(32);
-
-    await db.user.create({
-        data: {
-            id: userId,
-            email: email,
-            handle: handle,
-            hashedPassword: hashedPassword,
-        },
-    });
-
-    const session = await lucia.createSession(userId, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-    cookies().set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-    );
-    return redirect("/");
 }

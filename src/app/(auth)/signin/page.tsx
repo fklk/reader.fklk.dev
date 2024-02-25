@@ -15,12 +15,13 @@ import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
 import Link from "next/link";
 import { FklkIcon } from "@/app/_components/icon";
+import { handleSignIn } from "@/lib/actions";
 
 export default async function SiginIn() {
     return (
         <div className="flex flex-col justify-center items-center gap-4">
             <Form
-                className="flex flex-col gap-4 bg-secondary py-4 px-12 rounded-lg shadow-lg"
+                className="flex flex-col gap-4 bg-gray-200 py-4 px-12 rounded-lg shadow-lg"
                 action={handleSignIn}
             >
                 <div className="flex flex-col gap-2">
@@ -98,64 +99,4 @@ export default async function SiginIn() {
             </Form>
         </div>
     );
-}
-
-async function handleSignIn(_: any, formData: FormData): Promise<ActionResult> {
-    "use server";
-
-    const email = formData.get("email") as string;
-    const handle = formData.get("handle") as string;
-    const password = formData.get("password") as string;
-
-    if (!(email || handle) || !password) {
-        return {
-            error: "Insufficient credentials provided.",
-        };
-    }
-
-    let user = null;
-
-    if (email) {
-        user = await db.user.findUnique({
-            where: {
-                email: email,
-            },
-        });
-    }
-
-    if (!user) {
-        if (handle) {
-            user = await db.user.findUnique({
-                where: {
-                    handle: handle,
-                },
-            });
-        }
-    }
-
-    if (!user) {
-        return {
-            error: "Invalid email/handle and password",
-        };
-    }
-
-    const isPasswordValid = await new Argon2id().verify(
-        user.hashedPassword,
-        password
-    );
-
-    if (!isPasswordValid) {
-        return {
-            error: "Invalid email/handle and password",
-        };
-    }
-
-    const session = await lucia.createSession(user.id, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-    cookies().set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-    );
-    return redirect("/");
 }
