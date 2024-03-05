@@ -1,17 +1,16 @@
 import { api } from "@/trpc/server";
 import NovelCard from "../_components/novel-card";
 import Showcase from "./_components/showcase";
-import { getUser } from "@/lib/auth";
 
 export default async function Home() {
-    const user = await getUser();
     const readingProgress = await api.user.getReadingProgress.query({
-        id: user!.id,
         include: ["novel", "chapter"],
     });
 
     // Delete duplicates with Set
     const novelIds = Array.from(new Set(readingProgress.map(rp => rp.novelId)));
+
+    const showcaseNovels = await api.novel.getShowcaseNovels.query();
 
     // TODO: Display info text, when no reading progress or new chapters are there
     // ==> When no reading progress: "Start reading to see new updates here"
@@ -19,7 +18,7 @@ export default async function Home() {
 
     return (
         <div>
-            <Showcase />
+            <Showcase novels={showcaseNovels} />
             <div className="mt-10">
                 {readingProgress ? (
                     <>
