@@ -22,6 +22,7 @@ import { api } from "@/trpc/react";
 import { TabsContent } from "@radix-ui/react-tabs";
 import {
     CheckIcon,
+    EditIcon,
     MessageSquareTextIcon,
     PlusIcon,
     Share2Icon,
@@ -33,6 +34,12 @@ import { redirect } from "next/navigation";
 import { useRef, useState } from "react";
 import { capitalize } from "../../../../lib/utils";
 import { getBaseUrl } from "@/trpc/shared";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogTrigger,
+} from "@/app/_components/ui/dialog";
 
 type NovelPageProps = {
     params: {
@@ -44,14 +51,20 @@ export default function NovelPage(props: NovelPageProps) {
     const [showComment, setShowComment] = useState(false);
     const addCommentRef = useRef<HTMLTextAreaElement>(null);
 
+    // TODO: Add-Comment should be a modal
     // TODO: Make view count more realistic --> Counts only once per user?
     // TODO: Fix: runs infinity if just mutation without any conditions or on any event
+    // --> Run increment on server component --> no relaod --> no infinite loop
+    // --> New table to insert for each user only once --> count(*) for view-count
+    // --> check if user already has an entry for respective novel before incrementing
     const incrementViewMutation = api.novel.incrementView.useMutation();
 
     const { data, isLoading } = api.novel.getById.useQuery({
         id: props.params.novelId,
         include: ["author", "chapters", "genre"],
     });
+
+    const userQuery = api.session.getUser.useQuery();
 
     const comments = api.comment.getForNovel.useQuery({
         novelId: props.params.novelId,
@@ -84,6 +97,12 @@ export default function NovelPage(props: NovelPageProps) {
             ? removeNovelFromListMutation
             : addNovelToListMutation;
         mutation.mutate({ novelId: novelId });
+    };
+
+    const enableInsightsMutation = api.insight.enable.useMutation();
+
+    const handleEnableInsights = () => {
+        enableInsightsMutation.mutate({ novelId: props.params.novelId });
     };
 
     // TODO: Add "settings" button only visible for the author --> redirect to /.../edit,
@@ -161,11 +180,33 @@ export default function NovelPage(props: NovelPageProps) {
                                 <Button
                                     size="icon"
                                     variant="ghost"
-                                    onClick={() =>
-                                        redirect("/insight/novelId=1231")
-                                    }
                                 >
-                                    <ZapIcon className="w-5 h-5" />
+                                    {/* TODO: Modal that allows enabling insights */}
+                                    <Dialog modal={false}>
+                                        <DialogTrigger asChild>
+                                            <ZapIcon className="w-5 h-5" />
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <h3 className="text-2xl font-semibold">
+                                                Enable Insights
+                                            </h3>
+                                            <p>
+                                                Click the button below to enable
+                                                Insights for this novel. You can
+                                                then manage them under the
+                                                Insights menu tab.
+                                            </p>
+                                            <DialogClose asChild>
+                                                <Button
+                                                    onClick={() =>
+                                                        handleEnableInsights()
+                                                    }
+                                                >
+                                                    Enable Insights
+                                                </Button>
+                                            </DialogClose>
+                                        </DialogContent>
+                                    </Dialog>
                                 </Button>
                                 <Button
                                     size="icon"
@@ -195,6 +236,18 @@ export default function NovelPage(props: NovelPageProps) {
                                 >
                                     <Share2Icon className="w-5 h-5" />
                                 </Button>
+                                {userQuery.data?.id === data?.author.id ? (
+                                    <Link
+                                        href={`/novel/${props.params.novelId}/edit`}
+                                    >
+                                        <Button
+                                            size="icon"
+                                            variant="ghost"
+                                        >
+                                            <EditIcon className="w-5 h-5" />
+                                        </Button>
+                                    </Link>
+                                ) : null}
                             </div>
                         </div>
                         {isLoading ? (
@@ -322,7 +375,7 @@ export default function NovelPage(props: NovelPageProps) {
                                         <AvatarImage src="/avatar.png" />
                                         <AvatarFallback>A</AvatarFallback>
                                     </Avatar>
-                                    <h3>fklk</h3>
+                                    <h3>{comment.author.handle}</h3>
                                 </div>
                                 <p className="text-muted-foreground text-sm font-normal">
                                     {formatDuration(comment.createdAt)}

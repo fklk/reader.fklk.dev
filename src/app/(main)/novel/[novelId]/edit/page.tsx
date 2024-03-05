@@ -1,5 +1,6 @@
 import { api } from "@/trpc/server";
 import { notFound } from "next/navigation";
+import EditNovelForm from "./_components/edit-novel-form";
 
 type NovelEditPageProps = {
     params: {
@@ -14,18 +15,22 @@ export default async function NovelEditPage(props: NovelEditPageProps) {
         notFound();
     }
 
+    // TODO: Add functionality to add new chapters
+
     const novels = await api.novel.getWrittenByCurrentUser.query();
+    const genres = await api.genre.getAll.query();
 
     if (!novels.map(novel => novel.id).includes(props.params.novelId)) {
         notFound();
     }
 
     return (
-        <div className="mt-8 flex flex-col">
+        <div className="mt-4 flex flex-col w-full">
             <h4 className="text-3xl font-bold">{novel.name}</h4>
-            <div className="flex flex-wrap justify-between gap-4 mt-4">
-                Here you can edit
-            </div>
+            <EditNovelForm
+                novel={novel}
+                genres={genres}
+            />
         </div>
     );
 }
