@@ -8,12 +8,7 @@ import {
 import Link from "next/link";
 import { ReadrIcon } from "@/app/_components/icon";
 import { Button } from "@/app/_components/ui/button";
-import {
-    ArrowBigUpDashIcon,
-    MoonIcon,
-    SearchIcon,
-    SettingsIcon,
-} from "lucide-react";
+import { ArrowBigUpDashIcon, SearchIcon, SettingsIcon } from "lucide-react";
 import {
     KeyboardEvent as React_KeyboardEvent,
     useEffect,
@@ -89,15 +84,40 @@ export default function SubHeader(props: SubHeaderProps) {
             }
         }
 
+        function handleRedirectSiteSettings(event: KeyboardEvent) {
+            if (event.key === "L" && event.ctrlKey && event.shiftKey) {
+                router.push("/site-settings");
+            }
+        }
+
+        function handleRedirectProfile(event: KeyboardEvent) {
+            if (event.key === "U" && event.ctrlKey && event.shiftKey) {
+                router.push("/profile");
+            }
+        }
+
         document.addEventListener("click", handleClickOutside);
         document.addEventListener("keydown", handleShowSearchShortcut);
         document.addEventListener("keydown", handleHideSearchShortcut);
+        document.addEventListener("keydown", handleRedirectProfile);
+
+        if (role === "ADMIN") {
+            document.addEventListener("keydown", handleRedirectSiteSettings);
+        }
         return () => {
             document.removeEventListener("click", handleClickOutside);
             document.removeEventListener("keydown", handleShowSearchShortcut);
             document.removeEventListener("keydown", handleHideSearchShortcut);
+            document.removeEventListener("keydown", handleRedirectProfile);
+
+            if (role === "ADMIN") {
+                document.removeEventListener(
+                    "keydown",
+                    handleRedirectSiteSettings
+                );
+            }
         };
-    }, []);
+    });
 
     const handleSearch = (e: React_KeyboardEvent<HTMLInputElement>) => {
         if (
@@ -202,12 +222,6 @@ export default function SubHeader(props: SubHeaderProps) {
                                 </DialogTrigger>
                                 <DialogContent></DialogContent>
                             </Dialog>
-                            <Button
-                                size="icon"
-                                variant="ghost"
-                            >
-                                <MoonIcon className="w-5 h-5" />
-                            </Button>
                         </>
                     )}
                 </div>
@@ -224,7 +238,7 @@ export default function SubHeader(props: SubHeaderProps) {
                         <DropdownMenuItem>
                             Profile
                             <DropdownMenuShortcut>
-                                ^&#8679;P
+                                ^&#8679;U
                             </DropdownMenuShortcut>
                         </DropdownMenuItem>
                         {role === "ADMIN" ? (
@@ -232,7 +246,7 @@ export default function SubHeader(props: SubHeaderProps) {
                                 <DropdownMenuItem className="flex gap-2">
                                     Site settings
                                     <DropdownMenuShortcut>
-                                        ^&#8679;A
+                                        ^&#8679;L
                                     </DropdownMenuShortcut>
                                 </DropdownMenuItem>
                             </Link>
