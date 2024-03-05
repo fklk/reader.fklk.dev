@@ -17,7 +17,7 @@ import {
 import { capitalize, cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type SelectorProps = {
     items: any[];
@@ -56,7 +56,7 @@ export default function Selector(props: SelectorProps) {
         setOpen(false);
 
         if (props.onSelect) {
-            props.onSelect(currentValue);
+            props.onSelect(currentValue === value ? "" : currentValue);
         }
 
         if (props.urlParam) {
@@ -77,14 +77,16 @@ export default function Selector(props: SelectorProps) {
                     name={props.name}
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between bg-secondary focus-visible:bg-background"
+                    className="justify-between bg-secondary focus-visible:bg-background"
                 >
                     {value ? (
                         <div className="flex items-center gap-2">
                             {capitalize(props.name)}:{" "}
                             <Badge className="font-semibold">
                                 {props.items.find(
-                                    item => item.toLowerCase() === value
+                                    item =>
+                                        item.toLowerCase() ===
+                                        value.toLowerCase()
                                 )}
                             </Badge>
                         </div>

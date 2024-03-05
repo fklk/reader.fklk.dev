@@ -1,10 +1,4 @@
-import { lucia } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { generateId } from "lucia";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { Argon2id } from "oslo/password";
-import { ActionResult, Form } from "../../_components/form";
+import { Form } from "../../_components/form";
 import { FklkIcon } from "@/app/_components/icon";
 import { Label } from "@/app/_components/ui/label";
 import { Input } from "@/app/_components/ui/input";
@@ -16,7 +10,7 @@ export default async function SignUpPage() {
     return (
         <div className="flex flex-col justify-center items-center gap-4">
             <Form
-                className="flex flex-col gap-4 bg-gray-200 py-4 px-12 rounded-lg shadow-lg"
+                className="flex flex-col gap-4 bg-secondary/50 py-4 px-12 rounded-lg shadow-lg"
                 action={handleSignUp}
             >
                 <div className="flex flex-col gap-2">

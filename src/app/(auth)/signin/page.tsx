@@ -21,7 +21,7 @@ export default async function SiginIn() {
     return (
         <div className="flex flex-col justify-center items-center gap-4">
             <Form
-                className="flex flex-col gap-4 bg-gray-200 py-4 px-12 rounded-lg shadow-lg"
+                className="flex flex-col gap-4 bg-secondary/50 py-4 px-12 rounded-lg shadow-lg"
                 action={handleSignIn}
             >
                 <div className="flex flex-col gap-2">
