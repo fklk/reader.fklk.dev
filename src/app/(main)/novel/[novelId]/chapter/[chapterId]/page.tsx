@@ -1,6 +1,9 @@
 import { api } from "@/trpc/server";
-import { MessageSquareTextIcon } from "lucide-react";
 import { notFound } from "next/navigation";
+import ChapterContent from "./_components/chapter-content";
+import { Button } from "@/app/_components/ui/button";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import Link from "next/link";
 
 type NovelChapterPageProps = {
     params: {
@@ -19,31 +22,112 @@ export default async function NovelChapterPage(props: NovelChapterPageProps) {
         notFound();
     }
 
-    const { fontSize, fontFamily, lineHeight } =
-        await api.user.getSettings.query();
+    const { prev, next } = await api.chapter.getNeighbors.query({
+        novelId: props.params.novelId,
+        descriptor: chapter.descriptor,
+    });
 
-    let count = 0;
+    const insights = await api.insight.getAllForId.query({
+        chapterId: props.params.chapterId,
+        novelId: props.params.novelId,
+    });
+
+    const readingProgress = await api.user.getReadingProgress.query({
+        include: ["novel", "chapter"],
+    });
+
+    const isRead = !!readingProgress.find(
+        rp =>
+            rp.chapterId === props.params.chapterId &&
+            rp.novelId === props.params.novelId
+    );
+
+    const userSettings = await api.user.getSettings.query();
+
     //TODO: chapter preview bei publish
     //TODO: Add chapter to readProgress when at bottom of page + show toast when added
 
     return (
         <>
             <div className="space-y-3 py-8">
-                <h1 className="text-3xl font-bold">{chapter.novel.name}</h1>
+                <div className="flex justify-between">
+                    <h1 className="text-3xl font-bold">{chapter.novel.name}</h1>
+                    <div className="flex gap-3">
+                        <Link
+                            href={
+                                prev
+                                    ? `/novel/${props.params.novelId}/chapter/${prev.id}`
+                                    : ""
+                            }
+                            className={`${!prev ? "cursor-not-allowed" : ""}`}
+                        >
+                            <Button
+                                size="icon"
+                                disabled={!prev}
+                            >
+                                <ChevronLeftIcon />
+                            </Button>
+                        </Link>
+                        <Link
+                            href={
+                                next
+                                    ? `/novel/${props.params.novelId}/chapter/${next.id}`
+                                    : ""
+                            }
+                            className={`${!next ? "cursor-not-allowed" : ""}`}
+                        >
+                            <Button
+                                size="icon"
+                                disabled={!next}
+                            >
+                                <ChevronRightIcon />
+                            </Button>
+                        </Link>
+                    </div>
+                </div>
                 <h2 className="text-xl font-semibold">
                     Chapter {chapter.descriptor}: {chapter.name}
                 </h2>
-                {chapter?.content.split("\\n").map(p => (
-                    <p
-                        key={count++}
-                        className="leading-7 text-justify group"
+                <ChapterContent
+                    content={chapter.content}
+                    insights={insights}
+                    userSettings={userSettings}
+                    chapterId={props.params.chapterId}
+                    novelId={props.params.novelId}
+                    isRead={isRead}
+                />
+                <div className="flex gap-3 w-full justify-end">
+                    <Link
+                        href={
+                            prev
+                                ? `/novel/${props.params.novelId}/chapter/${prev.id}`
+                                : ""
+                        }
+                        className={`${!prev ? "cursor-not-allowed" : ""}`}
                     >
-                        {p}
-                        <span className="inline-flex ml-2 items-center invisible group-hover:visible">
-                            <MessageSquareTextIcon className="h-4 w-4" />
-                        </span>
-                    </p>
-                ))}
+                        <Button
+                            size="icon"
+                            disabled={!prev}
+                        >
+                            <ChevronLeftIcon />
+                        </Button>
+                    </Link>
+                    <Link
+                        href={
+                            next
+                                ? `/novel/${props.params.novelId}/chapter/${next.id}`
+                                : ""
+                        }
+                        className={`${!next ? "cursor-not-allowed" : ""}`}
+                    >
+                        <Button
+                            size="icon"
+                            disabled={!next}
+                        >
+                            <ChevronRightIcon />
+                        </Button>
+                    </Link>
+                </div>
             </div>
         </>
     );

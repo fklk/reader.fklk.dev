@@ -8,7 +8,7 @@ type InsightCardProps = {
 export default async function InsightCard(props: InsightCardProps) {
     return (
         <Card className="max-w-md w-60">
-            <CardHeader className="bg-slate-200 py-3">
+            <CardHeader className="bg-secondary py-3">
                 <h3 className="flex justify-between items-center">
                     <div className="flex gap-1">
                         Trigger:

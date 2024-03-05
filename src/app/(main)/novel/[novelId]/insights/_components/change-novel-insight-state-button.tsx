@@ -37,7 +37,7 @@ export default function ChangeNovelInsightStateButton(
         <Popover>
             <PopoverTrigger>
                 <div
-                    className={`flex items-center gap-1 text-lg px-3 py-1 bg-slate-100 rounded-md ${
+                    className={`flex items-center gap-1 text-lg px-3 py-1 bg-secondary rounded-md ${
                         insightStateQuery.data?.isActive
                             ? "text-green-500"
                             : "text-red-500"

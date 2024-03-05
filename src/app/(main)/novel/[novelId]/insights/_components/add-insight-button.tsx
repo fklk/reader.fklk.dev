@@ -20,9 +20,6 @@ type AddInsightButtonProps = {
 export default function AddInsightButton(props: AddInsightButtonProps) {
     const handleAddInsight = addNovelInsight.bind(null, props.novelId);
 
-    // TODO: "Enable Insights" button on novel page that adds the novel to the users 
-    // insight states with active for both default and custom
-
     return (
         <Dialog modal={false}>
             <DialogTrigger asChild>
@@ -34,7 +31,7 @@ export default function AddInsightButton(props: AddInsightButtonProps) {
                     className="flex flex-col gap-3"
                 >
                     <h3 className="text-xl font-medium">Create Insight</h3>
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between gap-4 items-center">
                         <Label
                             className="text-md"
                             htmlFor="trigger"
@@ -48,7 +45,7 @@ export default function AddInsightButton(props: AddInsightButtonProps) {
                             className="w-80"
                         />
                     </div>
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between gap-4 items-center">
                         <Label
                             className="text-md"
                             htmlFor="content"

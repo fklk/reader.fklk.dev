@@ -36,7 +36,7 @@ export default function EditableInsightCard(props: EditableInsightCardProps) {
         <Dialog modal={false}>
             <DialogTrigger>
                 <Card className="max-w-md w-60">
-                    <CardHeader className="bg-slate-200 py-3">
+                    <CardHeader className="bg-secondary py-3">
                         <h3 className="flex justify-between items-center">
                             <div className="flex gap-1">
                                 Trigger:
@@ -54,7 +54,7 @@ export default function EditableInsightCard(props: EditableInsightCardProps) {
             <DialogContent>
                 <form className="flex flex-col gap-3">
                     <h3 className="text-xl font-medium">Edit Insight</h3>
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between gap-4 items-center">
                         <Label
                             className="text-md"
                             htmlFor="trigger"
@@ -69,7 +69,7 @@ export default function EditableInsightCard(props: EditableInsightCardProps) {
                             className="w-80"
                         />
                     </div>
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between gap-4 items-center">
                         <Label
                             className="text-md"
                             htmlFor="content"

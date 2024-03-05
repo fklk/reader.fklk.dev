@@ -19,7 +19,9 @@ export default async function InsightsPage() {
                         <h4 className="text-xl">
                             No Insights are currently enabled
                         </h4>
-                        <span>Enable them on the respective novel's page</span>
+                        <span>
+                            Enable them on the respective novel&apos;s page
+                        </span>
                     </div>
                 ) : null}
             </div>
