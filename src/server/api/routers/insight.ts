@@ -79,4 +79,84 @@ export const insightRouter = createTRPCRouter({
                 },
             });
         }),
+
+    getAllForId: privateProcedure
+        .input(z.object({ novelId: z.string(), chapterId: z.string() }))
+        .query(async ({ ctx, input }) => {
+            let insights: {
+                trigger: string;
+                content: string;
+            }[] = [];
+
+            const insightStates = await ctx.db.userNovelInsightState.findMany({
+                where: {
+                    userId: ctx.user?.id,
+                    novelId: input.novelId,
+                },
+            });
+
+            if (
+                insightStates.find(
+                    state => state.category === "DEFAULT" && state.isActive
+                )
+            ) {
+                // TODO: Add chapter restriction
+                const defaultInsights = await ctx.db.novelInsight.findMany({
+                    where: {
+                        novelId: input.novelId,
+                    },
+                });
+
+                defaultInsights.forEach(insight => {
+                    insights.push({
+                        trigger: insight.trigger,
+                        content: insight.content,
+                    });
+                });
+            }
+
+            if (
+                insightStates.find(
+                    state => state.category === "CUSTOM" && state.isActive
+                )
+            ) {
+                const customInsights = await ctx.db.customNovelInsight.findMany(
+                    {
+                        where: {
+                            novelId: input.novelId,
+                            userId: ctx.user!.id,
+                        },
+                    }
+                );
+                customInsights.forEach(insight => {
+                    insights.push({
+                        trigger: insight.trigger,
+                        content: insight.content,
+                    });
+                });
+            }
+
+            return insights;
+        }),
+
+    enable: privateProcedure
+        .input(z.object({ novelId: z.string() }))
+        .mutation(async ({ ctx, input }) => {
+            return await ctx.db.userNovelInsightState.createMany({
+                data: [
+                    {
+                        novelId: input.novelId,
+                        userId: ctx.user!.id,
+                        category: "DEFAULT",
+                        isActive: true,
+                    },
+                    {
+                        novelId: input.novelId,
+                        userId: ctx.user!.id,
+                        category: "CUSTOM",
+                        isActive: true,
+                    },
+                ],
+            });
+        }),
 });

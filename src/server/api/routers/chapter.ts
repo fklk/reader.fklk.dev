@@ -1,5 +1,8 @@
-import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
-import { api } from "@/trpc/client";
+import {
+    adminProcedure,
+    createTRPCRouter,
+    privateProcedure,
+} from "@/server/api/trpc";
 import { z } from "zod";
 
 const includableFields = z.enum([
@@ -32,6 +35,13 @@ export const chapterRouter = createTRPCRouter({
                 ...takeCondition,
                 orderBy: {
                     descriptor: "desc",
+                },
+                include: {
+                    novel: {
+                        include: {
+                            author: true,
+                        },
+                    },
                 },
             });
         }),
@@ -139,4 +149,62 @@ export const chapterRouter = createTRPCRouter({
             maxChapters: minMax._max.descriptor ?? 0,
         };
     }),
+
+    getNeighbors: privateProcedure
+        .input(z.object({ novelId: z.string(), descriptor: z.number() }))
+        .query(async ({ ctx, input }) => {
+            const neighbors = await ctx.db.chapter.findMany({
+                where: {
+                    novelId: input.novelId,
+                    descriptor: {
+                        in: [input.descriptor - 1, input.descriptor + 1],
+                    },
+                },
+                orderBy: {
+                    descriptor: "asc",
+                },
+            });
+
+            if (neighbors.length === 2) {
+                return {
+                    prev: neighbors[0] ?? undefined,
+                    next: neighbors[1] ?? undefined,
+                };
+            }
+
+            return {
+                prev:
+                    neighbors[0]?.descriptor < input.descriptor
+                        ? neighbors[0]
+                        : undefined,
+                next:
+                    neighbors[0]?.descriptor > input.descriptor
+                        ? neighbors[0]
+                        : undefined,
+            };
+        }),
+
+    setRead: privateProcedure
+        .input(z.object({ id: z.string(), novelId: z.string() }))
+        .mutation(async ({ ctx, input }) => {
+            await ctx.db.readingProgress.create({
+                data: {
+                    chapterId: input.id,
+                    novelId: input.novelId,
+                    userId: ctx.user!.id,
+                },
+            });
+        }),
+
+    delete: adminProcedure
+        .input(z.object({ ids: z.array(z.string()) }))
+        .mutation(async ({ ctx, input }) => {
+            return await ctx.db.chapter.deleteMany({
+                where: {
+                    id: {
+                        in: input.ids,
+                    },
+                },
+            });
+        }),
 });

@@ -8,14 +8,25 @@ import { TRPCError } from "@trpc/server";
 
 export const commentRouter = createTRPCRouter({
     delete: privateProcedure
-        .input(z.object({ id: z.string() }))
+        .input(z.object({ ids: z.array(z.string()) }))
         .mutation(async ({ ctx, input }) => {
-            return await ctx.db.comment.delete({
+            return await ctx.db.comment.deleteMany({
                 where: {
-                    id: input.id,
+                    id: {
+                        in: input.ids,
+                    },
                 },
             });
         }),
+
+    getAll: adminProcedure.query(async ({ ctx }) => {
+        return await ctx.db.comment.findMany({
+            include: {
+                author: true,
+                novel: true,
+            },
+        });
+    }),
 
     getForNovel: privateProcedure
         .input(z.object({ novelId: z.string() }))
@@ -34,6 +45,9 @@ export const commentRouter = createTRPCRouter({
                 orderBy: {
                     createdAt: "desc",
                 },
+                include: {
+                    author: true,
+                },
             });
         }),
 
@@ -43,6 +57,9 @@ export const commentRouter = createTRPCRouter({
             return await ctx.db.comment.findMany({
                 where: {
                     chapterId: input.chapterId,
+                },
+                include: {
+                    author: true,
                 },
             });
         }),

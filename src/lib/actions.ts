@@ -2,13 +2,16 @@
 
 import { ActionResult } from "@/app/_components/form";
 import { api } from "@/trpc/server";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { lucia, validateRequest } from "./auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "./db";
 import { Argon2id } from "oslo/password";
 import { generateId } from "lucia";
+import { writeFile, rm } from "fs/promises";
+import { NovelStatus, UserRole } from "@prisma/client";
+import { toast } from "sonner";
 
 export const createCommentOnNovel = async (
     novelId: string,
@@ -272,8 +275,9 @@ export const handleCreateNovel = async (
     const name = formData.get("name") as string;
     const genre = formData.get("genre") as string;
     const description = formData.get("description") as string;
+    const coverFile = formData.get("cover") as File;
 
-    if (!name || !genre || !description) {
+    if (!name || !genre || !description || !coverFile) {
         return {
             error: "Insufficient data provided.",
         };
@@ -285,5 +289,123 @@ export const handleCreateNovel = async (
         description: description,
     });
 
+    const coverBytes = await coverFile.arrayBuffer();
+    const coverBuffer = Buffer.from(coverBytes);
+    const coverFileExtension = coverFile.type.split("/")[1];
+    const publicPath = `/cover/${novel.id}.${coverFileExtension}`;
+    const coverPath = `${process.cwd()}/public${publicPath}`;
+    await writeFile(coverPath, coverBuffer);
+
+    await api.novel.setImgPath.mutate({ id: novel.id, imgPath: publicPath });
+
     return redirect(`/novel/${novel.id}/edit`);
+};
+
+export const handleUpdateNovel = async (
+    _: any,
+    formData: FormData
+): Promise<ActionResult> => {
+    // TODO: Make this more pretty.
+    const name = formData.get("name") as string;
+    const genre = formData.get("genre") as string;
+    const novelId = formData.get("novelId") as string;
+    const description = formData.get("description") as string;
+    const coverFile = formData.get("cover") as File;
+
+    let imgPath = undefined;
+
+    if (coverFile.size > 0) {
+        const coverBytes = await coverFile.arrayBuffer();
+        const coverBuffer = Buffer.from(coverBytes);
+        const coverFileExtension = coverFile.type.split("/")[1];
+        const publicPath = `/cover/${novelId}.${coverFileExtension}`;
+        const coverPath = `${process.cwd()}/public${publicPath}`;
+        rm(coverPath).then(async () => {
+            await writeFile(coverPath, coverBuffer);
+        });
+        imgPath = publicPath;
+    }
+
+    await api.novel.update.mutate({
+        id: novelId,
+        genre: genre,
+        name: name,
+        description: description,
+        imgPath: imgPath,
+    });
+
+    // TODO: Unschön
+    return { error: "" };
+};
+
+export const handleUpdateShowcase = async (novelIds: string[], _: FormData) => {
+    await api.novel.purgeShowcases.mutate();
+    await api.novel.setShowcaseNovels.mutate({ ids: novelIds });
+
+    return revalidatePath("/");
+};
+
+export const handleDeleteUsers = async (userIds: string[], _: FormData) => {
+    await api.user.delete.mutate({ ids: userIds });
+
+    return revalidatePath("/");
+};
+
+export const handleUpdateUsers = async (
+    userIds: string[],
+    formData: FormData
+) => {
+    userIds.forEach(async id => {
+        await api.user.update.mutate({
+            id: id,
+            handle: formData.get(`handle_${id}`)! as string,
+            email: formData.get(`email_${id}`)! as string,
+            role: formData
+                .get(`role_${id}`)
+                ?.toString()
+                .toUpperCase()! as UserRole,
+        });
+    });
+    return revalidatePath("/");
+};
+
+export const handleCreateGenre = async (_: string[], formData: FormData) => {
+    await api.genre.create.mutate({ name: formData.get("name") as string });
+
+    return revalidatePath("/");
+};
+
+export const handleDeleteNovels = async (novelIds: string[], _: FormData) => {
+    await api.novel.delete.mutate({ ids: novelIds });
+    return revalidatePath("/");
+};
+
+export const handleUpdateNovels = async (
+    novelIds: string[],
+    formData: FormData
+) => {
+    novelIds.forEach(async id => {
+        await api.novel.updateBulk.mutate({
+            id: id,
+            name: formData.get(`name_${id}`)! as string,
+            description: formData.get(`description_${id}`)! as string,
+        });
+    });
+    return revalidatePath("/");
+};
+
+export const handleDeleteComments = async (
+    commentIds: string[],
+    _: FormData
+) => {
+    await api.comment.delete.mutate({ ids: commentIds });
+    return revalidatePath("/");
+};
+
+export const handleDeleteChapter = async (
+    chapterIds: string[],
+    _: FormData
+) => {
+    await api.chapter.delete.mutate({ ids: chapterIds });
+    return revalidatePath("/");
 };

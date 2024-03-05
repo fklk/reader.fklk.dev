@@ -1,4 +1,9 @@
-import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
+import {
+    adminProcedure,
+    createTRPCRouter,
+    privateProcedure,
+} from "@/server/api/trpc";
+import { UserRole } from "@prisma/client";
 import { z } from "zod";
 
 const includableFields = z.enum(["user", "novel", "chapter"]);
@@ -11,14 +16,13 @@ export const userRouter = createTRPCRouter({
     getReadingProgress: privateProcedure
         .input(
             z.object({
-                id: z.string(),
                 include: z.array(includableFields).optional(),
             })
         )
         .query(async ({ ctx, input }) => {
             return await ctx.db.readingProgress.findMany({
                 where: {
-                    userId: input.id,
+                    userId: ctx.user!.id,
                 },
                 include: {
                     user: input.include?.includes("user") ?? false,
@@ -113,12 +117,11 @@ export const userRouter = createTRPCRouter({
             lineHeight:
                 settings.find(s => s.setting === "LINE_HEIGHT")?.value ??
                 undefined,
-        } as UserSettings;
+        };
     }),
 
     getInsightNovels: privateProcedure.query(async ({ ctx }) => {
-        // TODO: Get distinct novels from usernovelinsightstate
-        return await ctx.db.customNovelInsight.findMany({
+        return await ctx.db.userNovelInsightState.findMany({
             distinct: ["novelId"],
             where: {
                 userId: ctx.user?.id,
@@ -128,15 +131,49 @@ export const userRouter = createTRPCRouter({
             },
         });
     }),
+
+    delete: adminProcedure
+        .input(z.object({ ids: z.array(z.string()) }))
+        .mutation(async ({ ctx, input }) => {
+            return await ctx.db.user.deleteMany({
+                where: {
+                    id: {
+                        in: input.ids,
+                    },
+                },
+            });
+        }),
+
+    update: adminProcedure
+        .input(
+            z.object({
+                id: z.string(),
+                handle: z.string(),
+                email: z.string(),
+                role: z.enum([UserRole.ADMIN, UserRole.USER]),
+            })
+        )
+        .mutation(async ({ ctx, input }) => {
+            await ctx.db.user.update({
+                data: {
+                    handle: input.handle,
+                    email: input.email,
+                    role: input.role,
+                },
+                where: {
+                    id: input.id,
+                },
+            });
+        }),
 });
 
 // TODO: Move to types folder or sth
 // TODO: Doesnt work as it should (in /chapter/[chapterId])
-type UserSettings = {
-    fontSize: FontSizeSetting | undefined;
-    fontFamily: FontFamilySetting | undefined;
-    lineHeight: number | undefined;
-};
+// type UserSettings = {
+//     fontSize: FontSizeSetting | undefined;
+//     fontFamily: FontFamilySetting | undefined;
+//     lineHeight: number | undefined;
+// };
 
 enum FontSizeSetting {
     X_SMALL,
