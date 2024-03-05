@@ -47,18 +47,19 @@ model Novel {
   description       String
   status            NovelStatus             @default(ANNOUNCED)
   imgPath           String                  @default("/novel_placeholder.jpg")
-  genre             Genre                   @relation(fields: [genreId], references: [id])
+  genre             Genre                   @relation(fields: [genreId], references: [id], onDelete: Restrict)
   genreId           Int
   chapters          Chapter[]
   comments          Comment[]
   readingProgress   ReadingProgress[]
   novelInsights     NovelInsight[]
-  author            User                    @relation(fields: [authorId], references: [id])
+  author            User                    @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId          String
   userLists         UserList[]
   views             Int                     @default(0)
   customInsights    CustomNovelInsight[]
   userInsightStates UserNovelInsightState[]
+  isOnShowcase      Boolean                 @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -86,7 +87,7 @@ model Chapter {
   descriptor      Int
   name            String
   content         String
-  novel           Novel             @relation(fields: [novelId], references: [id])
+  novel           Novel             @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId         String
   comments        Comment[]
   readingProgress ReadingProgress[]
@@ -101,11 +102,11 @@ model Chapter {
 model Comment {
   id        String   @id @default(uuid())
   content   String
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
-  novel     Novel    @relation(fields: [novelId], references: [id])
+  novel     Novel    @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId   String
-  chapter   Chapter? @relation(fields: [chapterId], references: [id])
+  chapter   Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String?
 
   createdAt DateTime @default(now())
@@ -113,11 +114,11 @@ model Comment {
 }
 
 model ReadingProgress {
-  user      User    @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  novel     Novel   @relation(fields: [novelId], references: [id])
+  novel     Novel   @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId   String
-  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String
 
   createdAt DateTime @default(now())
@@ -127,9 +128,9 @@ model ReadingProgress {
 }
 
 model NovelInsight {
-  novel     Novel    @relation(fields: [novelId], references: [id])
+  novel     Novel    @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId   String
-  chapter   Chapter? @relation(fields: [chapterId], references: [id])
+  chapter   Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String
   trigger   String
   content   String
@@ -141,9 +142,9 @@ model NovelInsight {
 }
 
 model CustomNovelInsight {
-  novel   Novel  @relation(fields: [novelId], references: [id])
+  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId String
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
   trigger String
   content String
@@ -152,19 +153,19 @@ model CustomNovelInsight {
 }
 
 model UserList {
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
-  novel   Novel  @relation(fields: [novelId], references: [id])
+  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId String
 
   @@id([userId, novelId])
 }
 
 model UserSettings {
-  user    User        @relation(fields: [userId], references: [id])
+  user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
   setting UserSetting
-  value   String
+  value   String?
 
   @@id([userId, setting])
 }
@@ -176,9 +177,9 @@ enum UserSetting {
 }
 
 model UserNovelInsightState {
-  user     User                 @relation(fields: [userId], references: [id])
+  user     User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   String
-  novel    Novel                @relation(fields: [novelId], references: [id])
+  novel    Novel                @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId  String
   category InsightStateCategory
   isActive Boolean
