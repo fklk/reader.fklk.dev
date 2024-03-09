@@ -5,9 +5,9 @@ export default async function InsightsPage() {
     const insights = await api.user.getInsightNovels.query();
 
     return (
-        <div className="flex flex-col gap-8 pb-8 mt-4 flex-grow">
+        <div className="flex flex-col gap-8 mt-8 flex-grow">
             <h1 className="text-3xl font-bold">Insights</h1>
-            <div className="mt-4 flex flex-wrap gap-x-8 gap-y-4 w-full">
+            <div className="flex flex-wrap gap-x-8 gap-y-4 w-full">
                 {insights.map(insight => (
                     <NovelInsightCard
                         key={insight.novelId}

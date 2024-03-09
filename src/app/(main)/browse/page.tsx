@@ -24,7 +24,7 @@ export default async function BrowsePage(props: BrowsePageProps) {
     });
 
     return (
-        <div className="flex flex-col flex-grow gap-8 pb-8">
+        <div className="flex flex-col flex-grow gap-8 pb-8 mt-8">
             <div className="flex flex-col gap-4">
                 <h1 className="text-3xl font-bold">Filter</h1>
                 <div className="flex gap-8">
@@ -53,7 +53,7 @@ export default async function BrowsePage(props: BrowsePageProps) {
                     />
                 </div>
             </div>
-            <div className="flex flex-grow gap-8 flex-wrap">
+            <div className="flex gap-8 flex-wrap">
                 {novelIdsByPopularity.map(novelId => (
                     <NovelCard
                         key={novelId}
