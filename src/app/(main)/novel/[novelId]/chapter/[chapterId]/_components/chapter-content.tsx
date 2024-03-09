@@ -75,7 +75,7 @@ export default function ChapterContent(props: ChapterContentProps) {
     return (
         <div
             ref={chapterContentRef}
-            className="h-fit"
+            className="h-fit flex flex-col gap-2"
         >
             {props.content.split("\\n").map((p, i) => (
                 <p

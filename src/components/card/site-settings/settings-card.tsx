@@ -28,7 +28,7 @@ export default function SettingsCard(props: SettingsCardProps) {
                     </CardContent>
                 </Card>
             </DialogTrigger>
-            <DialogContent className="h-5/6 max-h-5/6 w-3/4 overflow-y-scroll">
+            <DialogContent className="h-5/6 max-h-5/6 w-3/4 overflow-y-scroll flex flex-col gap-4">
                 <h2 className="text-3xl font-bold">{props.title}</h2>
                 {props.callout && (
                     <Callout type={props.callout.type}>
