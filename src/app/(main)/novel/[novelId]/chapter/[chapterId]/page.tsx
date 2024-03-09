@@ -44,9 +44,6 @@ export default async function NovelChapterPage(props: NovelChapterPageProps) {
 
     const userSettings = await api.user.getSettings.query();
 
-    //TODO: chapter preview bei publish
-    //TODO: Add chapter to readProgress when at bottom of page + show toast when added
-
     return (
         <>
             <div className="space-y-3 py-8">
@@ -96,38 +93,6 @@ export default async function NovelChapterPage(props: NovelChapterPageProps) {
                     novelId={props.params.novelId}
                     isRead={isRead}
                 />
-                <div className="flex gap-3 w-full justify-end">
-                    <Link
-                        href={
-                            prev
-                                ? `/novel/${props.params.novelId}/chapter/${prev.id}`
-                                : ""
-                        }
-                        className={`${!prev ? "cursor-not-allowed" : ""}`}
-                    >
-                        <Button
-                            size="icon"
-                            disabled={!prev}
-                        >
-                            <ChevronLeftIcon />
-                        </Button>
-                    </Link>
-                    <Link
-                        href={
-                            next
-                                ? `/novel/${props.params.novelId}/chapter/${next.id}`
-                                : ""
-                        }
-                        className={`${!next ? "cursor-not-allowed" : ""}`}
-                    >
-                        <Button
-                            size="icon"
-                            disabled={!next}
-                        >
-                            <ChevronRightIcon />
-                        </Button>
-                    </Link>
-                </div>
             </div>
         </>
     );

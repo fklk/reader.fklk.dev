@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import { ReadrIcon } from "@/app/_components/icon";
 import { Button } from "@/app/_components/ui/button";
-import { ArrowBigUpDashIcon, SearchIcon, SettingsIcon } from "lucide-react";
+import { ArrowBigUpDashIcon, SearchIcon } from "lucide-react";
 import {
     KeyboardEvent as React_KeyboardEvent,
     useEffect,
@@ -27,11 +27,6 @@ import {
 import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import { handleSignOut } from "@/lib/actions";
-import {
-    Dialog,
-    DialogContent,
-    DialogTrigger,
-} from "@/app/_components/ui/dialog";
 
 type SubHeaderProps = {
     userHandle: string;
@@ -43,7 +38,6 @@ export default function SubHeader(props: SubHeaderProps) {
     const searchInputRef = useRef<HTMLInputElement>(null);
     const searchOpenRef = useRef<HTMLButtonElement>(null);
 
-    //
     const role = api.session.getUser.useQuery().data?.role;
 
     const router = useRouter();
@@ -203,26 +197,13 @@ export default function SubHeader(props: SubHeaderProps) {
                 )}
                 <div className="flex gap-1">
                     {showSearch ? null : (
-                        <>
-                            <Button
-                                size="icon"
-                                ref={searchOpenRef}
-                                variant="ghost"
-                            >
-                                <SearchIcon className="w-5 h-5" />
-                            </Button>
-                            <Dialog modal={false}>
-                                <DialogTrigger asChild>
-                                    <Button
-                                        size="icon"
-                                        variant="ghost"
-                                    >
-                                        <SettingsIcon className="w-5 h-5" />
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent></DialogContent>
-                            </Dialog>
-                        </>
+                        <Button
+                            size="icon"
+                            ref={searchOpenRef}
+                            variant="ghost"
+                        >
+                            <SearchIcon className="w-5 h-5" />
+                        </Button>
                     )}
                 </div>
                 <DropdownMenu modal={false}>
@@ -256,13 +237,6 @@ export default function SubHeader(props: SubHeaderProps) {
                                 My novels
                             </DropdownMenuItem>
                         </Link>
-                        <DropdownMenuItem className="flex gap-2">
-                            {/* TODO: Show modal with all shortcuts (search, porfile, settings) */}
-                            Shortcuts
-                            <DropdownMenuShortcut>
-                                ^&#8679;#
-                            </DropdownMenuShortcut>
-                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => handleSignOut()}>
                             Sign out
