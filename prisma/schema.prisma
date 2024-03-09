@@ -18,7 +18,6 @@ model User {
   readingProgress    ReadingProgress[]
   authorOf           Novel[]
   list               UserList[]
-  settings           UserSettings[]
   customInsights     CustomNovelInsight[]
   novelInsightStates UserNovelInsightState[]
 
@@ -159,21 +158,6 @@ model UserList {
   novelId String
 
   @@id([userId, novelId])
-}
-
-model UserSettings {
-  user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String
-  setting UserSetting
-  value   String?
-
-  @@id([userId, setting])
-}
-
-enum UserSetting {
-  FONT_SIZE
-  FONT_FAMILY
-  LINE_HEIGHT
 }
 
 model UserNovelInsightState {

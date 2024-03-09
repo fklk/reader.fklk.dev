@@ -19,11 +19,6 @@ type ChapterContentProps = {
     chapterId: string;
     novelId: string;
     isRead: boolean;
-    userSettings: {
-        fontSize: string | undefined;
-        lineHeight: string | undefined;
-        fontFamily: string | undefined;
-    };
 };
 
 export default function ChapterContent(props: ChapterContentProps) {

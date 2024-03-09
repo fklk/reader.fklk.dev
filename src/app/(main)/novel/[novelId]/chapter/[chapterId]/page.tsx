@@ -42,8 +42,6 @@ export default async function NovelChapterPage(props: NovelChapterPageProps) {
             rp.novelId === props.params.novelId
     );
 
-    const userSettings = await api.user.getSettings.query();
-
     return (
         <>
             <div className="space-y-3 py-8">
@@ -88,7 +86,6 @@ export default async function NovelChapterPage(props: NovelChapterPageProps) {
                 <ChapterContent
                     content={chapter.content}
                     insights={insights}
-                    userSettings={userSettings}
                     chapterId={props.params.chapterId}
                     novelId={props.params.novelId}
                     isRead={isRead}

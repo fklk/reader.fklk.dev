@@ -100,26 +100,6 @@ export const userRouter = createTRPCRouter({
         ).map(ul => ul.novelId);
     }),
 
-    getSettings: privateProcedure.query(async ({ ctx }) => {
-        const settings = await ctx.db.userSettings.findMany({
-            where: {
-                userId: ctx.user?.id,
-            },
-        });
-
-        return {
-            fontSize:
-                settings.find(s => s.setting === "FONT_SIZE")?.value ??
-                undefined,
-            fontFamily:
-                settings.find(s => s.setting === "FONT_FAMILY")?.value ??
-                undefined,
-            lineHeight:
-                settings.find(s => s.setting === "LINE_HEIGHT")?.value ??
-                undefined,
-        };
-    }),
-
     getInsightNovels: privateProcedure.query(async ({ ctx }) => {
         return await ctx.db.userNovelInsightState.findMany({
             distinct: ["novelId"],
@@ -166,25 +146,3 @@ export const userRouter = createTRPCRouter({
             });
         }),
 });
-
-// TODO: Move to types folder or sth
-// TODO: Doesnt work as it should (in /chapter/[chapterId])
-// type UserSettings = {
-//     fontSize: FontSizeSetting | undefined;
-//     fontFamily: FontFamilySetting | undefined;
-//     lineHeight: number | undefined;
-// };
-
-enum FontSizeSetting {
-    X_SMALL,
-    SMALL,
-    NORMAL,
-    LARGE,
-    X_LARGE,
-}
-
-enum FontFamilySetting {
-    HELVETICA,
-    ARIAL,
-    SANS_SERIF,
-}
