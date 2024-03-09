@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/app/_components/ui/button";
-import { Checkbox } from "@/app/_components/ui/checkbox";
-import { Textarea } from "@/app/_components/ui/textarea";
+import { Button } from "@/components/shadcn/button";
+import { Checkbox } from "@/components/shadcn/checkbox";
+import { Textarea } from "@/components/shadcn/textarea";
 import { Chapter } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDownIcon } from "lucide-react";

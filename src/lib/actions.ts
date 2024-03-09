@@ -1,6 +1,6 @@
 "use server";
 
-import { ActionResult } from "@/app/_components/form";
+import { ActionResult } from "@/components/form/form";
 import { api } from "@/trpc/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { lucia, validateRequest } from "./auth";

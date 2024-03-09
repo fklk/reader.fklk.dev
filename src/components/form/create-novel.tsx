@@ -1,47 +1,28 @@
 "use client";
 
-import { Input } from "@/app/_components/ui/input";
-import { Label } from "@/app/_components/ui/label";
-import { Textarea } from "@/app/_components/ui/textarea";
-import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
-import { Form } from "@/app/_components/form";
-import { handleUpdateNovel } from "@/lib/actions";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
+import { Textarea } from "@/components/shadcn/textarea";
+import { Badge } from "@/components/shadcn/badge";
+import { Button } from "@/components/shadcn/button";
+import Selector from "../selector/selector";
+import { Form } from "@/components/form/form";
+import { handleCreateNovel } from "@/lib/actions";
 import { useState } from "react";
-import Selector from "@/app/(main)/browse/_components/selector";
-import { Genre, Novel } from "@prisma/client";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 type CreateNovelFormProps = {
-    novel: Novel;
-    genres: Genre[];
+    genreNames: string[];
 };
 
-export default function EditNovelForm(props: CreateNovelFormProps) {
-    const [genre, setGenre] = useState<string>(
-        props.genres.find(genre => genre.id === props.novel.genreId)!.name
-    );
-
-    const router = useRouter();
-
-    const handleUpdate = (prevState: any, formData: FormData) => {
-        const res = handleUpdateNovel(prevState, formData);
-        router.refresh();
-        return res;
-    };
+export default function CreateNovelForm(props: CreateNovelFormProps) {
+    const [genre, setGenre] = useState<string>("");
 
     return (
         <div className="flex justify-between">
             <Form
-                action={handleUpdate}
+                action={handleCreateNovel}
                 className="mt-8 flex flex-col gap-4 place-content-between w-1/3"
             >
-                <input
-                    type="hidden"
-                    name="novelId"
-                    value={props.novel.id}
-                />
                 <div className="flex justify-between items-center">
                     <Label
                         className="text-lg"
@@ -54,7 +35,6 @@ export default function EditNovelForm(props: CreateNovelFormProps) {
                         id="name"
                         name="name"
                         className="w-80"
-                        defaultValue={props.novel.name}
                     />
                 </div>
                 <div className="flex justify-between items-center">
@@ -65,10 +45,10 @@ export default function EditNovelForm(props: CreateNovelFormProps) {
                         Genre
                     </Label>
                     <Selector
-                        items={props.genres.map(genre => genre.name)}
+                        items={props.genreNames}
                         name="genre"
                         errorMessage="No genre found."
-                        defaultValue={genre}
+                        defaultValue=""
                         onSelect={setGenre}
                     />
                     <input
@@ -88,7 +68,6 @@ export default function EditNovelForm(props: CreateNovelFormProps) {
                         id="description"
                         name="description"
                         className="w-80"
-                        defaultValue={props.novel.description}
                     />
                 </div>
                 <div className="flex justify-between items-center">
@@ -104,16 +83,12 @@ export default function EditNovelForm(props: CreateNovelFormProps) {
                         className="w-80"
                     />
                 </div>
-                <Button type="submit">Update</Button>
+                <div className="flex items-center gap-2">
+                    Chapters can later be added under{" "}
+                    <Badge variant="secondary">My Novels</Badge>
+                </div>
+                <Button type="submit">Create</Button>
             </Form>
-            <div className="w-1/2 h-full">
-                <Image
-                    src={props.novel.imgPath}
-                    width={500}
-                    height={300}
-                    alt="Cover image"
-                />
-            </div>
         </div>
     );
 }

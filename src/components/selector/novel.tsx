@@ -1,19 +1,19 @@
 "use client";
 
-import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
+import { Badge } from "@/components/shadcn/badge";
+import { Button } from "@/components/shadcn/button";
 import {
     Command,
     CommandEmpty,
     CommandGroup,
     CommandInput,
     CommandItem,
-} from "@/app/_components/ui/command";
+} from "@/components/shadcn/command";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/app/_components/ui/popover";
+} from "@/components/shadcn/popover";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";

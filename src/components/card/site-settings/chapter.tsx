@@ -1,8 +1,8 @@
 "use client";
 
-import SiteSettingModal from "@/components/modal/site-setting/modal";
+import SiteSettingModal from "@/components/modal/site-settings/modal";
 import SettingsCard from "@/components/card/site-settings/settings-card";
-import { CalloutType } from "@/app/_components/callout";
+import { CalloutType } from "@/components/base/callout";
 import { Chapter, Novel, User } from "@prisma/client";
 import { columns } from "@/config/tables/site-settings/chapter";
 

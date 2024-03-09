@@ -1,5 +1,5 @@
 import { api } from "@/trpc/server";
-import NovelCard from "../../_components/novel-card";
+import NovelCard from "../../../../components/card/novel";
 
 export default async function MyNovelPage() {
     const novels = await api.novel.getWrittenByCurrentUser.query();

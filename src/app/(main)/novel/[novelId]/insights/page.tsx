@@ -1,10 +1,10 @@
 import { api } from "@/trpc/server";
 import { notFound } from "next/navigation";
-import InsightCard from "./_components/insight-card";
-import { Separator } from "@/app/_components/ui/separator";
-import EditableInsightCard from "./_components/editable-insight-card";
-import AddInsightButton from "./_components/add-insight-button";
-import ChangeNovelInsightStateButton from "./_components/change-novel-insight-state-button";
+import InsightCard from "../../../../../components/card/insight/insight";
+import { Separator } from "@/components/shadcn/separator";
+import EditableInsightCard from "../../../../../components/card/insight/editable";
+import AddInsightButton from "../../../../../components/button/insight/add";
+import ChangeNovelInsightStateButton from "../../../../../components/button/insight/change-novel-state";
 
 type InsightNovelPageProps = {
     params: {

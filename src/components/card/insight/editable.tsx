@@ -1,16 +1,16 @@
 "use client";
 
-import { Button } from "@/app/_components/ui/button";
-import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
+import { Button } from "@/components/shadcn/button";
+import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import {
     Dialog,
     DialogClose,
     DialogContent,
     DialogTrigger,
-} from "@/app/_components/ui/dialog";
-import { Input } from "@/app/_components/ui/input";
-import { Label } from "@/app/_components/ui/label";
-import { Textarea } from "@/app/_components/ui/textarea";
+} from "@/components/shadcn/dialog";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
+import { Textarea } from "@/components/shadcn/textarea";
 import { deleteCustomInsight, updateCustomInsight } from "@/lib/actions";
 import { CustomNovelInsight, NovelInsight } from "@prisma/client";
 import { Trash2Icon } from "lucide-react";

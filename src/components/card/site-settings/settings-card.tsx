@@ -1,10 +1,10 @@
-import Callout, { CalloutType } from "@/app/_components/callout";
-import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
+import Callout, { CalloutType } from "@/components/base/callout";
+import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import {
     Dialog,
     DialogContent,
     DialogTrigger,
-} from "@/app/_components/ui/dialog";
+} from "@/components/shadcn/dialog";
 import { ReactNode } from "react";
 
 type SettingsCardProps = {

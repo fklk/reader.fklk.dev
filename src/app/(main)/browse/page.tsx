@@ -1,6 +1,6 @@
 import { api } from "@/trpc/server";
-import NovelCard from "../_components/novel-card";
-import Selector from "./_components/selector";
+import NovelCard from "../../../components/card/novel";
+import Selector from "../../../components/selector/selector";
 
 type BrowsePageProps = {
     searchParams: {

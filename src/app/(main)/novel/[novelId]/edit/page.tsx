@@ -1,6 +1,6 @@
 import { api } from "@/trpc/server";
 import { notFound } from "next/navigation";
-import EditNovelForm from "./_components/edit-novel-form";
+import EditNovelForm from "../../../../../components/form/edit-novel";
 
 type NovelEditPageProps = {
     params: {

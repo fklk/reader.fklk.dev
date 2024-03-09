@@ -4,18 +4,18 @@ import {
     Avatar,
     AvatarFallback,
     AvatarImage,
-} from "@/app/_components/ui/avatar";
-import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
-import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
+} from "@/components/shadcn/avatar";
+import { Badge } from "@/components/shadcn/badge";
+import { Button } from "@/components/shadcn/button";
+import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import {
     HoverCard,
     HoverCardContent,
     HoverCardTrigger,
-} from "@/app/_components/ui/hover-card";
-import { Skeleton } from "@/app/_components/ui/skeleton";
-import { Tabs, TabsList, TabsTrigger } from "@/app/_components/ui/tabs";
-import { Textarea } from "@/app/_components/ui/textarea";
+} from "@/components/shadcn/hover-card";
+import { Skeleton } from "@/components/shadcn/skeleton";
+import { Tabs, TabsList, TabsTrigger } from "@/components/shadcn/tabs";
+import { Textarea } from "@/components/shadcn/textarea";
 import { createCommentOnNovel } from "@/lib/actions";
 import { formatDuration } from "@/lib/utils";
 import { api } from "@/trpc/react";
@@ -39,7 +39,7 @@ import {
     DialogClose,
     DialogContent,
     DialogTrigger,
-} from "@/app/_components/ui/dialog";
+} from "@/components/shadcn/dialog";
 
 type NovelPageProps = {
     params: {

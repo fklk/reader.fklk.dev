@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { FklkIcon, ReadrIcon } from "./_components/icon";
-import { Button } from "./_components/ui/button";
-import { Separator } from "./_components/ui/separator";
+import { FklkIcon, ReadrIcon } from "../components/base/icon";
+import { Button } from "../components/shadcn/button";
+import { Separator } from "../components/shadcn/separator";
 import {
     HomeIcon,
     BookTextIcon,
@@ -11,7 +11,7 @@ import {
     ChevronLeftIcon,
 } from "lucide-react";
 import { validateRequest } from "@/lib/auth";
-import SignOutButton from "./(auth)/_components/sign-out";
+import SignOutButton from "../components/form/sign-out";
 
 export default async function LandingPage() {
     const { session } = await validateRequest();
@@ -51,7 +51,7 @@ export default async function LandingPage() {
                                     Home
                                 </Button>
                             </Link>
-                            <SignOutButton className="text-3xl py-7 px-4"/>
+                            <SignOutButton className="text-3xl py-7 px-4" />
                         </>
                     ) : (
                         <>

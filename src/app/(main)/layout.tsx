@@ -1,5 +1,5 @@
-import { Toaster } from "../_components/ui/sonner";
-import Header from "./_components/header";
+import { Toaster } from "../../components/shadcn/sonner";
+import Header from "../../components/base/header/header";
 
 export default function MainLayout({
     children,

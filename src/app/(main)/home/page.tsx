@@ -1,6 +1,6 @@
 import { api } from "@/trpc/server";
-import NovelCard from "../_components/novel-card";
-import Showcase from "./_components/showcase";
+import NovelCard from "../../../components/card/novel";
+import Showcase from "../../../components/base/showcase";
 
 export default async function Home() {
     const readingProgress = await api.user.getReadingProgress.query({

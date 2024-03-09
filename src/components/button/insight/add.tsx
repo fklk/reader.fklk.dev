@@ -1,16 +1,16 @@
 "use client";
 
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@/components/shadcn/button";
 import {
     Dialog,
     DialogClose,
     DialogContent,
     DialogTrigger,
-} from "@/app/_components/ui/dialog";
-import { Input } from "@/app/_components/ui/input";
-import { Label } from "@/app/_components/ui/label";
+} from "@/components/shadcn/dialog";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
 import React from "react";
-import { Textarea } from "@/app/_components/ui/textarea";
+import { Textarea } from "@/components/shadcn/textarea";
 import { addNovelInsight } from "@/lib/actions";
 
 type AddInsightButtonProps = {

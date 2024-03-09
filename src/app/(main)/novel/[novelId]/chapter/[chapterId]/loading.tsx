@@ -1,4 +1,4 @@
-import { ReadrIcon } from "@/app/_components/icon";
+import { ReadrIcon } from "@/components/base/icon";
 
 export default function Loading() {
     return (

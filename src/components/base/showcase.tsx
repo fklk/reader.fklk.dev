@@ -1,11 +1,11 @@
 "use client";
 
-import { Card, CardContent } from "@/app/_components/ui/card";
+import { Card, CardContent } from "@/components/shadcn/card";
 import {
     Carousel,
     CarouselContent,
     CarouselItem,
-} from "@/app/_components/ui/carousel";
+} from "@/components/shadcn/carousel";
 import { Novel } from "@prisma/client";
 import Autoplay from "embla-carousel-autoplay";
 import Link from "next/link";

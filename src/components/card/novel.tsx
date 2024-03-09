@@ -1,5 +1,5 @@
-import { Badge } from "@/app/_components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
+import { Badge } from "@/components/shadcn/badge";
+import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { formatDuration } from "@/lib/utils";
 import { api } from "@/trpc/server";
 import Image from "next/image";

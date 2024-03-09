@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { api } from "@/trpc/server";
 import Link from "next/link";
 import Image from "next/image";

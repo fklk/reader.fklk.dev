@@ -4,8 +4,8 @@ import {
     HoverCard,
     HoverCardContent,
     HoverCardTrigger,
-} from "@/app/_components/ui/hover-card";
-import { Separator } from "@/app/_components/ui/separator";
+} from "@/components/shadcn/hover-card";
+import { Separator } from "@/components/shadcn/separator";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { api } from "@/trpc/react";

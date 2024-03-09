@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import NovelCard from "../_components/novel-card";
+import NovelCard from "../../../components/card/novel";
 import { api } from "@/trpc/server";
 
 type SearchPageProps = {

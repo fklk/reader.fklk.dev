@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { CustomNovelInsight, NovelInsight } from "@prisma/client";
 
 type InsightCardProps = {

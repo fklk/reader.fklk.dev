@@ -1,6 +1,6 @@
 "use client";
 
-import SiteSettingModal from "@/components/modal/site-setting/modal";
+import SiteSettingModal from "@/components/modal/site-settings/modal";
 import SettingsCard from "@/components/card/site-settings/settings-card";
 import { columns } from "../../../config/tables/site-settings/showcase";
 import { Genre, Novel, User } from "@prisma/client";

@@ -3,18 +3,18 @@ import { db } from "@/lib/db";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Argon2id } from "oslo/password";
-import { ActionResult, Form } from "../../_components/form";
+import { ActionResult, Form } from "../../../components/form/form";
 import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
-} from "@/app/_components/ui/tabs";
-import { Label } from "@/app/_components/ui/label";
-import { Input } from "@/app/_components/ui/input";
-import { Button } from "@/app/_components/ui/button";
+} from "@/components/shadcn/tabs";
+import { Label } from "@/components/shadcn/label";
+import { Input } from "@/components/shadcn/input";
+import { Button } from "@/components/shadcn/button";
 import Link from "next/link";
-import { FklkIcon } from "@/app/_components/icon";
+import { FklkIcon } from "@/components/base/icon";
 import { handleSignIn } from "@/lib/actions";
 
 export default async function SiginIn() {

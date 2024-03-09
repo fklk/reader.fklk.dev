@@ -4,7 +4,7 @@ import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/app/_components/ui/popover";
+} from "@/components/shadcn/popover";
 import { api } from "@/trpc/react";
 import { CheckCircle2Icon, XCircleIcon } from "lucide-react";
 import React from "react";

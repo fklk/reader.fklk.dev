@@ -1,8 +1,8 @@
-import { Form } from "../../_components/form";
-import { FklkIcon } from "@/app/_components/icon";
-import { Label } from "@/app/_components/ui/label";
-import { Input } from "@/app/_components/ui/input";
-import { Button } from "@/app/_components/ui/button";
+import { Form } from "../../../components/form/form";
+import { FklkIcon } from "@/components/base/icon";
+import { Label } from "@/components/shadcn/label";
+import { Input } from "@/components/shadcn/input";
+import { Button } from "@/components/shadcn/button";
 import Link from "next/link";
 import { handleSignUp } from "@/lib/actions";
 

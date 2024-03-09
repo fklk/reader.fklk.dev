@@ -4,10 +4,10 @@ import {
     Avatar,
     AvatarFallback,
     AvatarImage,
-} from "@/app/_components/ui/avatar";
+} from "@/components/shadcn/avatar";
 import Link from "next/link";
-import { ReadrIcon } from "@/app/_components/icon";
-import { Button } from "@/app/_components/ui/button";
+import { ReadrIcon } from "@/components/base/icon";
+import { Button } from "@/components/shadcn/button";
 import { ArrowBigUpDashIcon, SearchIcon } from "lucide-react";
 import {
     KeyboardEvent as React_KeyboardEvent,
@@ -15,7 +15,7 @@ import {
     useRef,
     useState,
 } from "react";
-import { Input } from "@/app/_components/ui/input";
+import { Input } from "@/components/shadcn/input";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -23,7 +23,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger,
-} from "@/app/_components/ui/dropdown-menu";
+} from "@/components/shadcn/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import { handleSignOut } from "@/lib/actions";

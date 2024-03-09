@@ -1,4 +1,4 @@
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@/components/shadcn/button";
 import { handleSignOut } from "@/lib/actions";
 
 export default async function SignOutButton({
