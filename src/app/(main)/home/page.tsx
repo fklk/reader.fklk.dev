@@ -7,22 +7,19 @@ export default async function Home() {
         include: ["novel", "chapter"],
     });
 
-    // Delete duplicates with Set
     const novelIds = Array.from(new Set(readingProgress.map(rp => rp.novelId)));
 
-    const showcaseNovels = await api.novel.getShowcaseNovels.query();
+    // TODO: Retrieve latest chapter for each novel. If readingProgress does not include the respective latest chapter, list it below
 
-    // TODO: Display info text, when no reading progress or new chapters are there
-    // ==> When no reading progress: "Start reading to see new updates here"
-    // ==> When just no new updates: "There are curretnly no new updates"
+    const showcaseNovels = await api.novel.getShowcaseNovels.query();
 
     return (
         <div>
             <Showcase novels={showcaseNovels} />
             <div className="mt-10">
-                {readingProgress ? (
+                <h1 className="text-2xl font-bold">Continue Reading</h1>
+                {readingProgress.length > 0 ? (
                     <>
-                        <h1 className="text-2xl font-bold">Continue Reading</h1>
                         <div className="flex gap-8 overflow-x-scroll py-2 px-2">
                             {novelIds.map(novelId => (
                                 <NovelCard
@@ -31,9 +28,22 @@ export default async function Home() {
                                     redirectTo="NOVEL_PAGE"
                                 />
                             ))}
+                            {novelIds.length === 0 ? (
+                                <div className="w-full h-full flex items-center justify-center">
+                                    <h3 className="text-lg text-muted-foreground">
+                                        There currently are no updates.
+                                    </h3>
+                                </div>
+                            ) : null}
                         </div>
                     </>
-                ) : null}
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                        <h3 className="text-lg text-muted-foreground">
+                            Start reading to see updates here.
+                        </h3>
+                    </div>
+                )}
             </div>
         </div>
     );

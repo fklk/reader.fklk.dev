@@ -63,7 +63,7 @@ export default async function BrowsePage(props: BrowsePageProps) {
                 ))}
                 {novelIdsByPopularity.length === 0 ? (
                     <div className="w-full h-full flex items-center justify-center">
-                        <h3 className="text-xl text-muted-foreground">
+                        <h3 className="text-lg text-muted-foreground">
                             No novels meet the given criteria.
                         </h3>
                     </div>
