@@ -1,6 +1,6 @@
 import { api } from "@/trpc/server";
-import NovelCard from "../../../components/card/novel";
-import Selector from "../../../components/selector/selector";
+import NovelCard from "../../../../components/card/novel";
+import Selector from "../../../../components/selector/selector";
 
 type BrowsePageProps = {
     searchParams: {
@@ -24,7 +24,7 @@ export default async function BrowsePage(props: BrowsePageProps) {
     });
 
     return (
-        <div className="flex flex-col flex-grow gap-8 pb-8 mt-8">
+        <>
             <div className="flex flex-col gap-4">
                 <h1 className="text-3xl font-bold">Filter</h1>
                 <div className="flex gap-8">
@@ -69,6 +69,6 @@ export default async function BrowsePage(props: BrowsePageProps) {
                     </div>
                 ) : null}
             </div>
-        </div>
+        </>
     );
 }

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import NovelCard from "../../../components/card/novel";
+import NovelCard from "../../../../components/card/novel";
 import { api } from "@/trpc/server";
 
 type SearchPageProps = {
@@ -18,7 +18,7 @@ export default async function SearchPage(props: SearchPageProps) {
     });
 
     return (
-        <div className="flex flex-col gap-6 mt-8">
+        <>
             <h1 className="text-3xl font-bold">
                 Found {matchingNovels.length}{" "}
                 {matchingNovels.length === 1 ? "result" : "results"}
@@ -32,6 +32,6 @@ export default async function SearchPage(props: SearchPageProps) {
                     />
                 ))}
             </div>
-        </div>
+        </>
     );
 }
