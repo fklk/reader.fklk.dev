@@ -57,6 +57,7 @@ export default function NovelPage(props: NovelPageProps) {
     // --> Run increment on server component --> no relaod --> no infinite loop
     // --> New table to insert for each user only once --> count(*) for view-count
     // --> check if user already has an entry for respective novel before incrementing
+    // TODO: Fix layout to not overflow when name exceeds a certain length
     const incrementViewMutation = api.novel.incrementView.useMutation();
 
     const { data, isLoading } = api.novel.getById.useQuery({
@@ -105,8 +106,6 @@ export default function NovelPage(props: NovelPageProps) {
         enableInsightsMutation.mutate({ novelId: props.params.novelId });
     };
 
-    // TODO: Add "settings" button only visible for the author --> redirect to /.../edit,
-    // - for description, update notices and insights
     return (
         <div className="flex justify-between w-full flex-grow mt-4">
             <div className="flex gap-8">
