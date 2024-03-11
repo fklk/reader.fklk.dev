@@ -45,7 +45,7 @@ model Novel {
   name              String
   description       String
   status            NovelStatus             @default(ANNOUNCED)
-  imgPath           String                  @default("/novel_placeholder.jpg")
+  imgPath           String
   genre             Genre                   @relation(fields: [genreId], references: [id], onDelete: Restrict)
   genreId           Int
   chapters          Chapter[]
