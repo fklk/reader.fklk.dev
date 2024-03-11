@@ -363,7 +363,7 @@ export const handleUpdateUsers = async (
             role: formData
                 .get(`role_${id}`)
                 ?.toString()
-                .toUpperCase()! as UserRole,
+                .toUpperCase() as UserRole,
         });
     });
     return revalidatePath("/");
@@ -408,4 +408,13 @@ export const handleDeleteChapter = async (
 ) => {
     await api.chapter.delete.mutate({ ids: chapterIds });
     return revalidatePath("/");
+};
+
+export const handleUpdateProfile = async (_: any, formData: FormData) => {
+    await api.user.updateSelf.mutate({
+        email: formData.get("email") as string,
+        handle: formData.get("handle") as string,
+    });
+
+    return { error: "" };
 };

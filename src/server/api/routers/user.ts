@@ -145,4 +145,23 @@ export const userRouter = createTRPCRouter({
                 },
             });
         }),
+
+    updateSelf: privateProcedure
+        .input(
+            z.object({
+                handle: z.string(),
+                email: z.string(),
+            })
+        )
+        .mutation(async ({ ctx, input }) => {
+            await ctx.db.user.update({
+                data: {
+                    handle: input.handle,
+                    email: input.email,
+                },
+                where: {
+                    id: ctx.user?.id,
+                },
+            });
+        }),
 });

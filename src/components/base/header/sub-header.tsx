@@ -216,12 +216,14 @@ export default function SubHeader(props: SubHeaderProps) {
                         </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem>
-                            Profile
-                            <DropdownMenuShortcut>
-                                ^&#8679;U
-                            </DropdownMenuShortcut>
-                        </DropdownMenuItem>
+                        <Link href="/profile">
+                            <DropdownMenuItem>
+                                Profile
+                                <DropdownMenuShortcut>
+                                    ^&#8679;U
+                                </DropdownMenuShortcut>
+                            </DropdownMenuItem>
+                        </Link>
                         {role === "ADMIN" ? (
                             <Link href="/site-settings">
                                 <DropdownMenuItem className="flex gap-2">
