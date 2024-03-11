@@ -13,12 +13,12 @@ import { Genre, Novel } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-type CreateNovelFormProps = {
+type EditNovelFormProps = {
     novel: Novel;
     genres: Genre[];
 };
 
-export default function EditNovelForm(props: CreateNovelFormProps) {
+export default function EditNovelForm(props: EditNovelFormProps) {
     const [genre, setGenre] = useState<string>(
         props.genres.find(genre => genre.id === props.novel.genreId)!.name
     );
