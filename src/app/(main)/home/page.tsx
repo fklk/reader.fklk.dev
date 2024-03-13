@@ -9,8 +9,6 @@ export default async function Home() {
 
     const novelIds = Array.from(new Set(readingProgress.map(rp => rp.novelId)));
 
-    // TODO: Retrieve latest chapter for each novel. If readingProgress does not include the respective latest chapter, list it below
-
     const showcaseNovels = await api.novel.getShowcaseNovels.query();
 
     return (

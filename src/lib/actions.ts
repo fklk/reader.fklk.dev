@@ -126,29 +126,27 @@ export const handleSignUp = async (
     _: any,
     formData: FormData
 ): Promise<ActionResult> => {
-    // TODO: Create api routes
-
     const email = formData.get("email") as string;
-    // TODO: Verify email conditions with zod (?)
-    if (email.length < 4) {
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return {
-            error: "Invalid email",
+            error: "Email does not match requirements",
         };
     }
 
     const handle = formData.get("handle") as string;
-    // TODO: Verify handle conditions with zod (?)
+
     if (handle.length < 4) {
         return {
-            error: "Invalid handle",
+            error: "Handle should be at least 4 characters long",
         };
     }
 
     const password = formData.get("password") as string;
-    // TODO: Verify password conditions with zod (?)
+
     if (password.length < 5) {
         return {
-            error: "Invalid password",
+            error: "Password should be at least 5 characters long",
         };
     }
 
@@ -210,7 +208,6 @@ export const handleSignIn = async (
     _: any,
     formData: FormData
 ): Promise<ActionResult> => {
-    // TODO: Create api routes
     const email = formData.get("email") as string;
     const handle = formData.get("handle") as string;
     const password = formData.get("password") as string;
@@ -305,7 +302,6 @@ export const handleUpdateNovel = async (
     _: any,
     formData: FormData
 ): Promise<ActionResult> => {
-    // TODO: Make this more pretty.
     const name = formData.get("name") as string;
     const genre = formData.get("genre") as string;
     const novelId = formData.get("novelId") as string;
@@ -334,7 +330,6 @@ export const handleUpdateNovel = async (
         imgPath: imgPath,
     });
 
-    // TODO: Unschön
     return { error: "" };
 };
 
