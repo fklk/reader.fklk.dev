@@ -10,8 +10,7 @@ import { db } from "./db";
 import { Argon2id } from "oslo/password";
 import { generateId } from "lucia";
 import { writeFile, rm } from "fs/promises";
-import { Chapter, NovelStatus, UserRole } from "@prisma/client";
-import { toast } from "sonner";
+import { UserRole } from "@prisma/client";
 
 export const createCommentOnNovel = async (
     novelId: string,
