@@ -157,7 +157,7 @@ export const insightRouter = createTRPCRouter({
                 defaultInsights.forEach(insight => {
                     if (
                         insight.chapter.descriptor <=
-                        chapterReadingProgress.at(0)!.chapter.descriptor
+                        chapterReadingProgress[0].chapter.descriptor
                     ) {
                         insights.push({
                             trigger: insight.trigger,
