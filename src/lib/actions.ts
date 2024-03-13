@@ -10,7 +10,7 @@ import { db } from "./db";
 import { Argon2id } from "oslo/password";
 import { generateId } from "lucia";
 import { writeFile, rm } from "fs/promises";
-import { NovelStatus, UserRole } from "@prisma/client";
+import { Chapter, NovelStatus, UserRole } from "@prisma/client";
 import { toast } from "sonner";
 
 export const createCommentOnNovel = async (
@@ -414,6 +414,36 @@ export const handleUpdateProfile = async (_: any, formData: FormData) => {
     await api.user.updateSelf.mutate({
         email: formData.get("email") as string,
         handle: formData.get("handle") as string,
+    });
+
+    return { error: "" };
+};
+
+export const handleCreateChapter = async (_: any, formData: FormData) => {
+    const novelId = formData.get("novelId") as string;
+
+    const latestChapter = await api.chapter.getLatestForNovel.query({
+        novelId: novelId,
+    });
+
+    const nextDescriptor = latestChapter ? latestChapter.descriptor + 1 : 0;
+
+    await api.chapter.create.mutate({
+        novelId: novelId,
+        descriptor: nextDescriptor,
+        name: formData.get("name") as string,
+        content: formData.get("content") as string,
+    });
+
+    return { error: "" };
+};
+
+export const handleInsightCreate = async (_: any, formData: FormData) => {
+    await api.insight.createGlobal.mutate({
+        novelId: formData.get("novelId") as string,
+        content: formData.get("content") as string,
+        trigger: formData.get("trigger") as string,
+        chapterId: formData.get("chapterId") as string,
     });
 
     return { error: "" };

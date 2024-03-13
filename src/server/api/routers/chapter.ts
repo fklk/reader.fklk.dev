@@ -4,6 +4,8 @@ import {
     privateProcedure,
 } from "@/server/api/trpc";
 import { z } from "zod";
+import { createCaller } from "../root";
+import { TRPCError } from "@trpc/server";
 
 const includableFields = z.enum([
     "novel",
@@ -69,6 +71,19 @@ export const chapterRouter = createTRPCRouter({
             });
         }),
 
+    getFirst: privateProcedure
+        .input(z.object({ novelId: z.string() }))
+        .query(async ({ ctx, input }) => {
+            return await ctx.db.chapter.findUnique({
+                where: {
+                    id_descriptor: {
+                        id: input.novelId,
+                        descriptor: 0,
+                    },
+                },
+            });
+        }),
+
     getLatestForNovel: privateProcedure
         .input(
             z.object({
@@ -77,7 +92,7 @@ export const chapterRouter = createTRPCRouter({
             })
         )
         .query(async ({ ctx, input }) => {
-            return await ctx.db.chapter.findMany({
+            const latestChapter = await ctx.db.chapter.findMany({
                 take: 1,
                 where: {
                     novelId: input.novelId,
@@ -94,6 +109,7 @@ export const chapterRouter = createTRPCRouter({
                     descriptor: "desc",
                 },
             });
+            return latestChapter.at(0);
         }),
 
     getLatestForNovels: privateProcedure
@@ -130,6 +146,9 @@ export const chapterRouter = createTRPCRouter({
             return await ctx.db.chapter.findMany({
                 where: {
                     novelId: { in: input.novelIds },
+                },
+                orderBy: {
+                    descriptor: "asc",
                 },
             });
         }),
@@ -203,6 +222,38 @@ export const chapterRouter = createTRPCRouter({
                 where: {
                     id: {
                         in: input.ids,
+                    },
+                },
+            });
+        }),
+
+    create: privateProcedure
+        .input(
+            z.object({
+                novelId: z.string(),
+                descriptor: z.number(),
+                name: z.string(),
+                content: z.string(),
+            })
+        )
+        .mutation(async ({ ctx, input }) => {
+            const caller = createCaller(ctx);
+
+            const novel = await caller.novel.getById({ id: input.novelId });
+
+            if (novel?.authorId !== ctx.user?.id) {
+                throw new TRPCError({ code: "UNAUTHORIZED" });
+            }
+
+            return await ctx.db.chapter.create({
+                data: {
+                    name: input.name,
+                    content: input.content,
+                    descriptor: input.descriptor,
+                    novel: {
+                        connect: {
+                            id: input.novelId,
+                        },
                     },
                 },
             });
