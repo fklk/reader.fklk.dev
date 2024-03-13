@@ -17,13 +17,14 @@ import {
 import { capitalize, cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 type SelectorProps = {
     items: any[];
     name: string;
     errorMessage: string;
     defaultValue: string;
+    render?: string[];
     urlParam?: string;
     onSelect?: (_: string) => void;
 };
@@ -83,11 +84,17 @@ export default function Selector(props: SelectorProps) {
                         <div className="flex items-center gap-2">
                             {capitalize(props.name)}:{" "}
                             <Badge className="font-semibold">
-                                {props.items.find(
-                                    item =>
-                                        item.toLowerCase() ===
-                                        value.toLowerCase()
-                                )}
+                                {props.render
+                                    ? props.render.at(
+                                          props.items
+                                              .map(item => item.toLowerCase())
+                                              .indexOf(value.toLowerCase())
+                                      )
+                                    : props.items.find(
+                                          item =>
+                                              item.toLowerCase() ===
+                                              value.toLowerCase()
+                                      )}
                             </Badge>
                         </div>
                     ) : (
@@ -117,7 +124,9 @@ export default function Selector(props: SelectorProps) {
                                             : "opacity-0"
                                     )}
                                 />
-                                {item}
+                                {props.render
+                                    ? props.render.at(props.items.indexOf(item))
+                                    : item}
                             </CommandItem>
                         ))}
                     </CommandGroup>
