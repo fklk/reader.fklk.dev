@@ -7,9 +7,6 @@ import { api } from "@/trpc/server";
 import { notFound } from "next/navigation";
 import EnableNovelInsightsModal from "@/components/modal/novel/enable-insights";
 import HandleNovelListButton from "@/components/button/novel/handle-list";
-import CommentCard from "@/components/card/novel/comment";
-import { ChevronDown } from "lucide-react";
-import GuideChevron from "@/components/base/guide-chevron";
 
 type NovelPageProps = {
     params: {
@@ -60,68 +57,55 @@ export default async function NovelPage(props: NovelPageProps) {
     });
 
     return (
-        <>
-            <div className="flex h-[90vh] gap-12 mt-4 justify-between relative">
-                <div
-                    className="absolute h-[35rem] filter grayscale hover:grayscale-0 rounded-md overflow-hidden aspect-[9/16] right-0"
-                    style={{
-                        background: `url('${novel.imgPath}')`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center",
-                        backgroundSize: "cover",
-                    }}
-                ></div>
-                <GuideChevron />
-                <div className="w-1/2 flex flex-col gap-8">
-                    <div className="flex flex-col gap-4">
-                        <div className="flex justify-between">
-                            <h1 className="text-4xl font-bold w-1/2 text-wrap">
-                                {novel.name}
-                            </h1>
-                            <div className="flex gap-2">
-                                <HandleNovelListButton
-                                    isOnList={userListNovelIds.includes(
-                                        props.params.novelId
-                                    )}
-                                    novelId={props.params.novelId}
-                                />
-                                {areInsightsEnabled ? null : (
-                                    <EnableNovelInsightsModal
-                                        novelId={novel.id}
-                                    />
+        <div className="flex h-[90vh] gap-12 mt-4 justify-between relative">
+            <div
+                className="absolute h-[35rem] filter grayscale hover:grayscale-0 rounded-md overflow-hidden aspect-[9/16] right-0"
+                style={{
+                    background: `url('${novel.imgPath}')`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                }}
+            ></div>
+            <div className="w-1/2 flex flex-col gap-8">
+                <div className="flex flex-col gap-4">
+                    <div className="flex justify-between">
+                        <h1 className="text-4xl font-bold w-1/2 text-wrap">
+                            {novel.name}
+                        </h1>
+                        <div className="flex gap-2">
+                            <HandleNovelListButton
+                                isOnList={userListNovelIds.includes(
+                                    props.params.novelId
                                 )}
-                                <AddCommentModal novelId={novel.id} />
-                                <CopyNovelLinkButton novelId={novel.id} />
-                                <EditNovelButton novelId={novel.id} />
-                            </div>
+                                novelId={props.params.novelId}
+                            />
+                            {areInsightsEnabled ? null : (
+                                <EnableNovelInsightsModal novelId={novel.id} />
+                            )}
+                            <AddCommentModal
+                                novelId={novel.id}
+                                comments={comments}
+                            />
+                            <CopyNovelLinkButton novelId={novel.id} />
+                            <EditNovelButton novelId={novel.id} />
                         </div>
-                        <NovelInfoCard novel={novel} />
-                        <p className="mt-4">{novel.description}</p>
                     </div>
-                    <NovelActions
-                        chapters={chapters}
-                        nextChapter={chapterNeighbors.next}
-                        readingVerb={
-                            readingProgress.find(
-                                rp => rp.novelId === props.params.novelId
-                            )
-                                ? "Continue"
-                                : "Start"
-                        }
-                    />
+                    <NovelInfoCard novel={novel} />
+                    <p className="mt-4">{novel.description}</p>
                 </div>
+                <NovelActions
+                    chapters={chapters}
+                    nextChapter={chapterNeighbors.next}
+                    readingVerb={
+                        readingProgress.find(
+                            rp => rp.novelId === props.params.novelId
+                        )
+                            ? "Continue"
+                            : "Start"
+                    }
+                />
             </div>
-            <div className="mt-16">
-                <h2 className="text-3xl font-bold">Comments</h2>
-                <div className="flex flex-col gap-2 mt-4 pb-8">
-                    {comments.map(comment => (
-                        <CommentCard
-                            key={comment.id}
-                            comment={comment}
-                        />
-                    ))}
-                </div>
-            </div>
-        </>
+        </div>
     );
 }
