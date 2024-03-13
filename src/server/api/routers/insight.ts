@@ -211,4 +211,17 @@ export const insightRouter = createTRPCRouter({
                 ],
             });
         }),
+
+    isEnabled: privateProcedure
+        .input(z.object({ novelId: z.string() }))
+        .query(async ({ ctx, input }) => {
+            const res = await ctx.db.userNovelInsightState.findMany({
+                where: {
+                    userId: ctx.user!.id,
+                    novelId: input.novelId,
+                },
+            });
+
+            return res.length > 0;
+        }),
 });
