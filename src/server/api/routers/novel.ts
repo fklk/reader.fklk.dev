@@ -48,6 +48,7 @@ export const novelRouter = createTRPCRouter({
                 data: {
                     name: input.name,
                     description: input.description,
+                    imgPath: "",
                     genre: {
                         connect: {
                             id: genre!.id,
