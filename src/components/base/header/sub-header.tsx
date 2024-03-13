@@ -206,7 +206,7 @@ export default function SubHeader(props: SubHeaderProps) {
                         </Button>
                     )}
                 </div>
-                <DropdownMenu modal={false}>
+                <DropdownMenu>
                     <DropdownMenuTrigger>
                         <Avatar className="ring-border ring-1 ring-offset-1 ring-offset-background h-8 w-8">
                             <AvatarImage src="https://avatars.githubusercontent.com/u/85395498?v=4" />

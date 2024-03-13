@@ -11,7 +11,7 @@ type NovelEditCardProps = {
 
 export default function NovelEditCard(props: NovelEditCardProps) {
     return (
-        <Dialog modal={false}>
+        <Dialog>
             <DialogTrigger>
                 <Card>
                     <CardContent className="text-2xl bg-secondary font-semibold flex items-center justify-center px-4 py-8">

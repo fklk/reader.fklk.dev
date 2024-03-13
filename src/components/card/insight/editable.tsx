@@ -33,7 +33,7 @@ export default function EditableInsightCard(props: EditableInsightCardProps) {
     );
 
     return (
-        <Dialog modal={false}>
+        <Dialog>
             <DialogTrigger>
                 <Card className="max-w-md w-60">
                     <CardHeader className="bg-secondary py-3">

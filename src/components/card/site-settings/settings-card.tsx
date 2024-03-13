@@ -18,7 +18,7 @@ type SettingsCardProps = {
 
 export default function SettingsCard(props: SettingsCardProps) {
     return (
-        <Dialog modal={false}>
+        <Dialog>
             <DialogTrigger>
                 <Card className="min-w-48 justify-center max-w-48 min-h-32 bg-secondary cursor-pointer flex items-center">
                     <CardContent className="p-0">

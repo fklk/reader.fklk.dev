@@ -21,7 +21,7 @@ export default function AddInsightButton(props: AddInsightButtonProps) {
     const handleAddInsight = addNovelInsight.bind(null, props.novelId);
 
     return (
-        <Dialog modal={false}>
+        <Dialog>
             <DialogTrigger asChild>
                 <Button>Add Insight</Button>
             </DialogTrigger>
