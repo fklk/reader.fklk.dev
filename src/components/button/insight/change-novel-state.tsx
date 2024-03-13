@@ -23,14 +23,13 @@ export default function ChangeNovelInsightStateButton(
     });
     const changeInsightStateMutation = api.novel.setInsightState.useMutation();
 
-    // TODO:Implement instant reload, adjust design
     const handleStateChange = () => {
         changeInsightStateMutation.mutate({
             novelId: props.novelId,
             category: props.category,
             state: insightStateQuery.data?.isActive ? "inactive" : "active",
         });
-        insightStateQuery.refetch();
+        setTimeout(() => insightStateQuery.refetch(), 50);
     };
 
     return (
