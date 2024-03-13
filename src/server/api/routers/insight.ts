@@ -1,6 +1,9 @@
 import { db } from "@/lib/db";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
+import { createCaller } from "../root";
+import { Novel } from "@prisma/client";
 
 export const insightRouter = createTRPCRouter({
     getCustomById: privateProcedure
@@ -32,6 +35,36 @@ export const insightRouter = createTRPCRouter({
                     content: input.content,
                     novelId: input.novelId,
                     userId: ctx.user!.id,
+                },
+            });
+        }),
+
+    createGlobal: privateProcedure
+        .input(
+            z.object({
+                novelId: z.string(),
+                trigger: z.string(),
+                content: z.string(),
+                chapterId: z.string(),
+            })
+        )
+        .mutation(async ({ ctx, input }) => {
+            const caller: any = createCaller(ctx);
+
+            const novel = await caller.novel.getById({
+                id: input.novelId,
+            });
+
+            if (novel?.authorId !== ctx.user!.id) {
+                throw new TRPCError({ code: "UNAUTHORIZED" });
+            }
+
+            return await ctx.db.novelInsight.create({
+                data: {
+                    trigger: input.trigger,
+                    content: input.content,
+                    novelId: input.novelId,
+                    chapterId: input.chapterId,
                 },
             });
         }),
@@ -100,18 +133,37 @@ export const insightRouter = createTRPCRouter({
                     state => state.category === "DEFAULT" && state.isActive
                 )
             ) {
-                // TODO: Add chapter restriction
+                const caller = createCaller(ctx);
+                const userReadingProgress =
+                    await caller.user.getReadingProgress({
+                        include: ["chapter"],
+                    });
+
+                const chapterReadingProgress = userReadingProgress
+                    .filter(rp => rp.novelId === input.novelId)
+                    .sort(
+                        (a, b) => b.chapter.descriptor - a.chapter.descriptor
+                    );
+
                 const defaultInsights = await ctx.db.novelInsight.findMany({
                     where: {
                         novelId: input.novelId,
                     },
+                    include: {
+                        chapter: true,
+                    },
                 });
 
                 defaultInsights.forEach(insight => {
-                    insights.push({
-                        trigger: insight.trigger,
-                        content: insight.content,
-                    });
+                    if (
+                        insight.chapter.descriptor <=
+                        chapterReadingProgress.at(0)!.chapter.descriptor
+                    ) {
+                        insights.push({
+                            trigger: insight.trigger,
+                            content: insight.content,
+                        });
+                    }
                 });
             }
 
