@@ -85,15 +85,9 @@ export default async function SiginIn() {
                 <div className="mt-4 text-sm flex items-center flex-col gap-2 pb-2">
                     <Link
                         className="hover:underline underline-offset-4 text-primary"
-                        href="/"
-                    >
-                        Forgot password?
-                    </Link>
-                    <Link
-                        className="hover:underline underline-offset-4 text-primary"
                         href="/signup"
                     >
-                        Sign up
+                        Sign up instead
                     </Link>
                 </div>
             </Form>

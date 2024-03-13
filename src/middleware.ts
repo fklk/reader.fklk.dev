@@ -40,8 +40,7 @@ const isProtectedRoute = (pathname: string): boolean => {
         pathname.startsWith("/static") ||
         pathname.startsWith("/signin") ||
         pathname.startsWith("/signup") ||
-        pathname === "/" ||
-        /\.(.*)$/.test(pathname)
+        pathname === "/"
     ) {
         return false;
     }
