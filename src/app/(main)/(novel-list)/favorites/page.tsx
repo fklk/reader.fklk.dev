@@ -1,6 +1,6 @@
 import { api } from "@/trpc/server";
 import React from "react";
-import NovelCard from "../../../../components/card/novel";
+import NovelCard from "../../../../components/card/novel/novel";
 
 export default async function FavoritesPage() {
     const favoriteNovelIds = await api.user.getListNovelIds.query();

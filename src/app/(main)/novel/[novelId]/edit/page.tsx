@@ -1,4 +1,4 @@
-import NovelEditCard from "@/components/card/novel-edit";
+import NovelEditCard from "@/components/card/novel/edit";
 import AddChapterForm from "@/components/form/add-chapter";
 import AddInsightForm from "@/components/form/add-insight";
 import EditNovelForm from "@/components/form/edit-novel";

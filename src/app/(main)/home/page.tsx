@@ -1,5 +1,5 @@
 import { api } from "@/trpc/server";
-import NovelCard from "../../../components/card/novel";
+import NovelCard from "../../../components/card/novel/novel";
 import Showcase from "../../../components/base/showcase";
 
 export default async function Home() {
