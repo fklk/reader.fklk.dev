@@ -51,19 +51,6 @@ export const commentRouter = createTRPCRouter({
             });
         }),
 
-    getForChapter: privateProcedure
-        .input(z.object({ chapterId: z.string() }))
-        .query(async ({ ctx, input }) => {
-            return await ctx.db.comment.findMany({
-                where: {
-                    chapterId: input.chapterId,
-                },
-                include: {
-                    author: true,
-                },
-            });
-        }),
-
     createOnNovel: privateProcedure
         .input(
             z.object({
