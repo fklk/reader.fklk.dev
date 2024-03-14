@@ -1,11 +1,15 @@
 "use client";
 
 import { MessageSquareMoreIcon } from "lucide-react";
-import { Button } from "../../shadcn/button";
-import { Dialog, DialogContent, DialogTrigger } from "../../shadcn/dialog";
-import AddCommentForm from "../../form/add-comment";
 import { Comment, User } from "@prisma/client";
 import CommentCard from "@/components/card/novel/comment";
+import {
+    Dialog,
+    DialogContent,
+    DialogTrigger,
+} from "@/components/shadcn/dialog";
+import { Button } from "@/components/shadcn/button";
+import AddCommentForm from "@/components/form/add-comment";
 
 type AddCommentModalProps = {
     novelId: string;

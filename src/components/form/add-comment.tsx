@@ -1,5 +1,4 @@
 import { createCommentOnNovel } from "@/lib/actions";
-import { Label } from "../shadcn/label";
 import { Textarea } from "../shadcn/textarea";
 import { DialogClose } from "../shadcn/dialog";
 import { Button } from "../shadcn/button";

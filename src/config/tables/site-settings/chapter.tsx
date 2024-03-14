@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/shadcn/button";
 import { Checkbox } from "@/components/shadcn/checkbox";
-import { Textarea } from "@/components/shadcn/textarea";
 import { Chapter } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDownIcon } from "lucide-react";

@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/shadcn/button";
 import { Checkbox } from "@/components/shadcn/checkbox";
-import { Input } from "@/components/shadcn/input";
 import { Textarea } from "@/components/shadcn/textarea";
 import { Comment } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";

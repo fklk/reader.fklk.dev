@@ -1,5 +1,8 @@
 "use client";
 
+// Source: https://ui.shadcn.com/docs/components/data-table
+// General layout adopted, adjusted to meet requirements
+
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -19,22 +22,14 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/shadcn/table";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
-import { PlusCircleIcon, SaveIcon, Trash2Icon } from "lucide-react";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogTrigger,
-} from "@/components/shadcn/dialog";
+import { SaveIcon, Trash2Icon } from "lucide-react";
+import { DialogClose } from "@/components/shadcn/dialog";
 import { toast } from "sonner";
 import { z } from "zod";
 import Selector from "@/components/selector/selector";
-import { Label } from "@/components/shadcn/label";
-import { revalidatePath } from "next/cache";
-import { useRouter } from "next/navigation";
 
 const SearchInputSchema = z
     .object({

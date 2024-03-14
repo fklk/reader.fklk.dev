@@ -1,9 +1,9 @@
 import { api } from "@/trpc/server";
 import { notFound } from "next/navigation";
-import ChapterContent from "../../../../../../components/base/chapter-content";
 import { Button } from "@/components/shadcn/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
+import ChapterContent from "@/components/base/chapter-content";
 
 type NovelChapterPageProps = {
     params: {

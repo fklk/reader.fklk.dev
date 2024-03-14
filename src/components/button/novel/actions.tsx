@@ -1,9 +1,9 @@
 "use client";
 
-import { Chapter, Novel } from "@prisma/client";
+import { Chapter } from "@prisma/client";
 import ViewChaptersModal from "../../modal/novel/view-chapters";
 import { Button } from "../../shadcn/button";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type NovelActionsProps = {
     readingVerb: string;

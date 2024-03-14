@@ -104,6 +104,7 @@ export const addNovelInsight = async (novelId: string, formData: FormData) => {
     revalidateTag("/");
 };
 
+// Source: https://lucia-auth.com/
 export const handleSignOut = async () => {
     const { session } = await validateRequest();
     if (!session) {
@@ -121,6 +122,8 @@ export const handleSignOut = async () => {
     return redirect("/signin");
 };
 
+// Source: https://lucia-auth.com/
+// Adjusted to meet requirements
 export const handleSignUp = async (
     _: any,
     formData: FormData
@@ -203,6 +206,8 @@ export const handleSignUp = async (
     return redirect("/");
 };
 
+// Source: https://lucia-auth.com/
+// Adjusted to meet requirements
 export const handleSignIn = async (
     _: any,
     formData: FormData

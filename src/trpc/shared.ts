@@ -1,3 +1,5 @@
+// Source: https://github.com/t3-oss/create-t3-app
+
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
 

@@ -1,3 +1,6 @@
+// Source: https://github.com/t3-oss/create-t3-app
+// General layout adopted, customized to requirements
+
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { sessionRouter } from "./routers/session";
 import { novelRouter } from "./routers/novel";

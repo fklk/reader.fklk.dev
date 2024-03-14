@@ -1,3 +1,5 @@
+// Source: https://github.com/t3-oss/create-t3-app
+
 import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {

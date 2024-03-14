@@ -1,5 +1,5 @@
 import Callout, { CalloutType } from "@/components/base/callout";
-import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
+import { Card, CardContent } from "@/components/shadcn/card";
 import {
     Dialog,
     DialogContent,

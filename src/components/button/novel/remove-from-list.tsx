@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/shadcn/button";
 import { api } from "@/trpc/react";
-import { PlusIcon, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 
 type RemoveNovelFromListButtonProps = {
     novelId: string;

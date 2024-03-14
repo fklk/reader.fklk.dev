@@ -1,7 +1,7 @@
 "use client";
 
 import { Chapter } from "@prisma/client";
-import { Card, CardContent, CardHeader } from "../shadcn/card";
+import { Card, CardContent } from "../shadcn/card";
 import { formatDuration } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 

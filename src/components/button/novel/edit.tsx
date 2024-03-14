@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/shadcn/button";
-import { getBaseUrl } from "@/trpc/shared";
-import { CopySlashIcon, Edit3Icon } from "lucide-react";
+import { Edit3Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type EditNovelButtonProps = {

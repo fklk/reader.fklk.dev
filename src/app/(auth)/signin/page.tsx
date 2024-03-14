@@ -1,9 +1,4 @@
-import { lucia } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { Argon2id } from "oslo/password";
-import { ActionResult, Form } from "../../../components/form/form";
+import { Form } from "../../../components/form/form";
 import {
     Tabs,
     TabsContent,

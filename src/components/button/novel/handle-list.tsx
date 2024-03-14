@@ -1,8 +1,5 @@
 "use client";
 
-import { Button } from "@/components/shadcn/button";
-import { api } from "@/trpc/react";
-import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import AddNovelToListButton from "./add-to-list";
 import RemoveNovelFromListButton from "./remove-from-list";

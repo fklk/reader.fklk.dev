@@ -1,5 +1,5 @@
+import CreateNovelForm from "@/components/form/create-novel";
 import { api } from "@/trpc/server";
-import CreateNovelForm from "../../../components/form/create-novel";
 
 export default async function PublishPage() {
     const genres = await api.genre.getAll.query();

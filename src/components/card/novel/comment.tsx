@@ -1,8 +1,4 @@
-import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage,
-} from "@/components/shadcn/avatar";
+import { Avatar, AvatarFallback } from "@/components/shadcn/avatar";
 import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { formatDuration } from "@/lib/utils";
 import { Comment, User } from "@prisma/client";

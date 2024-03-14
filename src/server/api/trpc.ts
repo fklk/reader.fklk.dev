@@ -1,3 +1,6 @@
+// Source: https://github.com/t3-oss/create-t3-app
+// Small modifications made
+
 import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
@@ -5,6 +8,7 @@ import { ZodError } from "zod";
 import { db } from "../../lib/db";
 import { getUser, validateRequest } from "@/lib/auth";
 
+// Modifications were made
 export const createTRPCContext = async (opts: { headers?: Headers }) => {
     const user = await getUser();
 
@@ -31,6 +35,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
     },
 });
 
+// Added
 const isAuthenticated = t.middleware(async opts => {
     const { session } = await validateRequest();
 
@@ -41,6 +46,7 @@ const isAuthenticated = t.middleware(async opts => {
     return opts.next();
 });
 
+// Added
 const isAdmin = t.middleware(async opts => {
     const { session, user } = await validateRequest();
 

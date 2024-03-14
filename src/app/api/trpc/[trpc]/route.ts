@@ -3,7 +3,6 @@ import { type NextRequest } from "next/server";
 
 import { appRouter } from "@/server/api/root";
 import { createTRPCContext } from "@/server/api/trpc";
-import { cookies } from "next/headers";
 
 const createContext = async (req: NextRequest) => {
     return createTRPCContext({

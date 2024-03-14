@@ -1,6 +1,6 @@
+import NovelCard from "@/components/card/novel/novel";
 import { api } from "@/trpc/server";
 import React from "react";
-import NovelCard from "../../../../components/card/novel/novel";
 
 export default async function PopularPage() {
     const novelIdsByPopularity = await api.novel.getAllByPopularity.query({

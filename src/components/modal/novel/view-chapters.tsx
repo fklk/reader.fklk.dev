@@ -1,9 +1,13 @@
 "use client";
 
+import ChapterCard from "@/components/card/chapter";
+import { Button } from "@/components/shadcn/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogTrigger,
+} from "@/components/shadcn/dialog";
 import { Chapter } from "@prisma/client";
-import { Button } from "../../shadcn/button";
-import { Dialog, DialogContent, DialogTrigger } from "../../shadcn/dialog";
-import ChapterCard from "../../card/chapter";
 
 type ViewChaptersModalProps = {
     chapters: Chapter[];

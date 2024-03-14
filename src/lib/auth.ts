@@ -1,3 +1,6 @@
+// Source: https://lucia-auth.com/
+// General layout adopted, small adjustments were made
+
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { Lucia, Session, User } from "lucia";
 import { db } from "./db";

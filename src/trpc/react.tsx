@@ -1,5 +1,7 @@
 "use client";
 
+// Source: https://github.com/t3-oss/create-t3-app
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";

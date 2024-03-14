@@ -3,14 +3,12 @@
 import { Input } from "@/components/shadcn/input";
 import { Label } from "@/components/shadcn/label";
 import { Textarea } from "@/components/shadcn/textarea";
-import { Badge } from "@/components/shadcn/badge";
 import { Button } from "@/components/shadcn/button";
 import { Form } from "@/components/form/form";
 import { handleUpdateNovel } from "@/lib/actions";
 import { useState } from "react";
 import Selector from "@/components/selector/selector";
 import { Genre, Novel } from "@prisma/client";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { DialogClose } from "../shadcn/dialog";
 

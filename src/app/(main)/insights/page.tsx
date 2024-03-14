@@ -1,5 +1,5 @@
+import NovelInsightCard from "@/components/card/insight/novel";
 import { api } from "@/trpc/server";
-import NovelInsightCard from "../../../components/card/insight/novel";
 
 export default async function InsightsPage() {
     const insights = await api.user.getInsightNovels.query();

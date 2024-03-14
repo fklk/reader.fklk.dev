@@ -1,5 +1,8 @@
 "use client";
 
+// Source: https://www.embla-carousel.com
+// Template used and adjusted
+
 import { Card, CardContent } from "@/components/shadcn/card";
 import {
     Carousel,
@@ -15,7 +18,6 @@ type ShowcaseProps = {
 };
 
 export default function Showcase(props: ShowcaseProps) {
-    // https://www.embla-carousel.com/plugins/autoplay/
     const plugins = [Autoplay({ delay: 5000 })];
     const opts = {
         loop: true,

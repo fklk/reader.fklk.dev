@@ -1,4 +1,3 @@
-import { Badge } from "@/components/shadcn/badge";
 import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { formatDuration } from "@/lib/utils";
 import { api } from "@/trpc/server";

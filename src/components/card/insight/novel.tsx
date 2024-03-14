@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { api } from "@/trpc/server";
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle2Icon, CircleSlashIcon, XCircleIcon } from "lucide-react";
+import { CheckCircle2Icon, XCircleIcon } from "lucide-react";
 
 type NovelInsightCardProps = {
     id: string;

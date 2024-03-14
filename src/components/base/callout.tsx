@@ -1,6 +1,6 @@
+import { capitalize } from "@/lib/utils";
 import { AlertTriangleIcon, InfoIcon, XCircleIcon } from "lucide-react";
 import { ReactNode } from "react";
-import { capitalize } from "../../lib/utils";
 
 const types = ["INFO", "WARNING", "ERROR"] as const;
 
