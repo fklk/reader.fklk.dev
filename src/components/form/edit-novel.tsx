@@ -8,7 +8,7 @@ import { Form } from "@/components/form/form";
 import { handleUpdateNovel } from "@/lib/actions";
 import { useState } from "react";
 import Selector from "@/components/selector/selector";
-import { Genre, Novel } from "@prisma/client";
+import { Genre, Novel, NovelStatus } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { DialogClose } from "../shadcn/dialog";
 
@@ -20,6 +20,10 @@ type EditNovelFormProps = {
 export default function EditNovelForm(props: EditNovelFormProps) {
     const [genre, setGenre] = useState<string>(
         props.genres.find(genre => genre.id === props.novel.genreId)!.name
+    );
+
+    const [status, setStatus] = useState<string>(
+        Object.keys(NovelStatus).find(status => status === props.novel.status)!
     );
 
     const router = useRouter();
@@ -73,6 +77,26 @@ export default function EditNovelForm(props: EditNovelFormProps) {
                     type="hidden"
                     name="genre"
                     value={genre}
+                />
+            </div>
+            <div className="flex justify-between items-center">
+                <Label
+                    className="text-lg"
+                    htmlFor="status"
+                >
+                    Status
+                </Label>
+                <Selector
+                    items={Object.keys(NovelStatus)}
+                    name="staus"
+                    errorMessage="No status found."
+                    defaultValue={status}
+                    onSelect={setStatus}
+                />
+                <input
+                    type="hidden"
+                    name="status"
+                    value={status}
                 />
             </div>
             <div className="flex justify-between items-center">

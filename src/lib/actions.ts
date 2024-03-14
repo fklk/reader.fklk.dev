@@ -310,6 +310,7 @@ export const handleUpdateNovel = async (
     const genre = formData.get("genre") as string;
     const novelId = formData.get("novelId") as string;
     const description = formData.get("description") as string;
+    const status = formData.get("status") as string;
     const coverFile = formData.get("cover") as File;
 
     let imgPath = undefined;
@@ -330,6 +331,7 @@ export const handleUpdateNovel = async (
         id: novelId,
         genre: genre,
         name: name,
+        status: status,
         description: description,
         imgPath: imgPath,
     });

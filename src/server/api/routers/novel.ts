@@ -5,6 +5,7 @@ import {
 } from "@/server/api/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { NovelStatus } from "@prisma/client";
 
 const includableFields = z.enum([
     "comments",
@@ -69,6 +70,7 @@ export const novelRouter = createTRPCRouter({
                 id: z.string(),
                 name: z.string().optional(),
                 description: z.string().optional(),
+                status: z.string().optional(),
                 genre: z.string().optional(),
                 imgPath: z.string().optional(),
             })
@@ -111,6 +113,17 @@ export const novelRouter = createTRPCRouter({
                     },
                     data: {
                         genreId: genre!.id,
+                    },
+                });
+            }
+
+            if (input.status && input.status !== novel.status) {
+                await ctx.db.novel.update({
+                    where: {
+                        id: input.id,
+                    },
+                    data: {
+                        status: input.status.toUpperCase() as NovelStatus,
                     },
                 });
             }
