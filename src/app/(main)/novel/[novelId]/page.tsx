@@ -7,6 +7,7 @@ import { api } from "@/trpc/server";
 import { notFound } from "next/navigation";
 import EnableNovelInsightsModal from "@/components/modal/novel/enable-insights";
 import HandleNovelListButton from "@/components/button/novel/handle-list";
+import { getUser } from "@/lib/auth";
 
 type NovelPageProps = {
     params: {
@@ -19,6 +20,8 @@ export default async function NovelPage(props: NovelPageProps) {
         id: props.params.novelId,
         include: ["author", "genre", "chapters"],
     });
+
+    const user = await getUser();
 
     if (!novel) {
         notFound();
@@ -88,7 +91,9 @@ export default async function NovelPage(props: NovelPageProps) {
                                 comments={comments}
                             />
                             <CopyNovelLinkButton novelId={novel.id} />
-                            <EditNovelButton novelId={novel.id} />
+                            {user!.id === novel.authorId && (
+                                <EditNovelButton novelId={novel.id} />
+                            )}
                         </div>
                     </div>
                     <NovelInfoCard novel={novel} />
