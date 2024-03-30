@@ -43,9 +43,8 @@ export default function Selector(props: SelectorProps) {
 
             if (params.has(name)) {
                 params.delete(name);
-            } else {
-                params.set(name, value);
             }
+            params.set(name, value);
 
             return params.toString();
         },
