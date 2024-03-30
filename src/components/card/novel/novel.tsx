@@ -21,10 +21,15 @@ export default async function NovelCard(props: NovelCardProps) {
     }`;
 
     return (
-        <Card className="min-w-72 ring-2 h-fit ring-transparent hover:ring-primary cursor-pointer ring-offset-4 ring-offset-background">
+        <Card className="min-w-72 max-w-72 ring-2 h-fit ring-transparent hover:ring-primary cursor-pointer ring-offset-4 ring-offset-background">
             <Link href={redirectUrl}>
-                <CardHeader className="bg-secondary font-bold py-3 rounded-t-lg">
-                    {novel?.name}
+                <CardHeader
+                    className="bg-secondary font-bold py-3 rounded-t-lg"
+                    title={novel?.name.length! > 24 ? novel?.name : ""}
+                >
+                    {novel?.name
+                        .slice(0, 24)
+                        .concat(novel?.name.length > 24 ? " ..." : "")}
                 </CardHeader>
             </Link>
             <CardContent className="p-0 flex h-36 items-center">
