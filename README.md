@@ -42,15 +42,35 @@ Für die Entwicklung dieser Anwendung wurden verschiedene Technologien und Frame
 
 ### 3.1 Next.js
 
-Next.js ist ein Open-Source Full-Stack React Framework. Für diese Anwendung wurde Next.js in der Version 14.1.0 mit dem App-Router verwendet. Als Programmiersprache wurde TypeScript gewählt, da in größeren Anwendungen schnell Typ-Probleme auftreten können. Die Type-Safety, die TypeScript bietet, schafft Sicherheit und ermöglicht es, Fehler schnell zu erkennen.
+Next.js ist ein Open-Source Full-Stack React Framework. Für diese Anwendung wurde Next.js in der Version 14.1.0 mit dem App-Router verwendet. Als Programmiersprache wurde TypeScript gewählt, da in größeren Anwendungen schnell Typ-Probleme auftreten können. Die Type-Safety, die TypeScript bietet, schafft Sicherheit und ermöglicht es, Fehler schnell zu erkennen. Durch die Aufteilung in React-Server-Components und 'klassische' React-Client-Components wurde die Datenabfrage stark vereinfacht. Sofern nötig wurde sich an den Aufbau gehalten, die <kbd>page.tsx</kbd> Datei als Server-Component zu verwenden, um dort die benötigten Daten über bspw. tRPC abzufragen. In dem Server-Component wurden dann entweder weitere Server-Components, oder - sollte clientseitige Interaktion nötig sein - Client-Components verwendet. Das Prinzip der dynamischen Routen wurde ebenfalls verwendet. Dynamische Routen ermöglichen das Erstellen von Seiten, die von einem oder mehreren Parametern abhängig sind. Durch das Einklammern eines Ordnernamens in eckige Klammern, wird eine dynamische Route erstellt. So ist bei <kbd>@/app/(main)/novel/[novelId]/page.tsx</kbd> die <kbd>novelId</kbd> ein dynamisches Segment. Ruft ein Nutzer entsprechend eine URL <kbd>http://localhost:3000/novel/{novelId}</kbd> auf, erhält die <kbd>page.tsx</kbd> den entsprechenden Wert unter dem Key <kbd>novelId</kbd> eines Objektes <kbd>params</kbd>:
+
+```ts
+type NovelProps = {
+    params: {
+        novelId: string;
+    };
+};
+
+export default async function NovelPage(props: NovelProps) {
+    // Datenabfragen anhand `props.novelId` tätigen
+}
+```
+
+Ordnernamen, die mit runden Klammern umschlossen sind dienen ausschließlich der Strukturierung und werden nicht geroutet. <kbd>@/app/(main)/novel/[novelId]/page.tsx</kbd> ist demnach unter <kbd>http://localhost:3000/novel/{novelId}</kbd> erreichbar und nicht unter <kbd>http://localhost:3000/(main)/novel/{novelId}</kbd>.
 
 ### 3.2 Prisma
 
-Prisma ist ein Datenbank-Toolkit, das die Interaktion mit Datenbanken in Anwendungen vereinfacht. Es bietet eine deklarative Datenmodellierungssprache, mit der Tabellen und Beziehungen in der Datenbank definiert werden können, ohne dass SQL geschrieben werden muss. Prisma generiert automatisch sicheren und leistungsfähigen Datenbankzugriffscode, der Typsicherheit und eine intuitive API für Datenbankabfragen bietet.
+Prisma ist ein Datenbank-Toolkit, das die Interaktion mit Datenbanken in Anwendungen vereinfacht. Es bietet eine deklarative Datenmodellierungssprache, mit der Tabellen und Beziehungen in der Datenbank definiert werden können, ohne dass SQL geschrieben werden muss. Prisma generiert automatisch sicheren und leistungsfähigen Datenbankzugriffscode, der Typsicherheit und eine intuitive API für Datenbankabfragen bietet. Ein Objekt der Klasse PrismaClient bietet Zugriff auf alle im Prisma-Schema erstellen Tabellen. Auf die jeweiligen Tabellen sind verschiedene Methoden anzuwenden, um Datenabfragen zu tätigen, oder den Zustand der Datenbanktabellen zu verändern. Beispielhaft ließe sich eine Liste aller erstellten Kommentare über
+
+```ts
+PrismaClient.comment.findMany();
+```
+
+abfragen. Jegliche andere Anpassungen der Abfrage, wie sie standardmäßig in plain-SQL vorzunehmen wären (Bedingungen, Joins, Gruppuierungen, ...), sind in Prisma ebenfalls realisierbar.
 
 ### 3.3 tRPC
 
-tRPC ist ein Framework zur Entwicklung von APIs für TypeScript und JavaScript-Anwendungen. Es ermöglicht die einfache Erstellung von API-Endpunkten mit Typsicherheit und automatischer Codegenerierung. Da das Backend, das Frontend und die Next.js-Middleware verschiedene Laufzeiten besitzen, sind verschiedene <kbd>api</kbd> Instanzen notwendig, um den Zugriff auf den <kbd>appRouter</kbd> aus jeder Laufzeit zu gewährleisten. Der <kbd>appRouter</kbd> besteht aus weiteren Subroutern, die jeweils eine Menge an sog. Prozeduren aufweisen. Eine Prozedur ist in dieser Anwendung ein Element aus {<kbd>publicProcedure</kbd>, <kbd>privateProcedure</kbd>, <kbd>adminProcedure</kbd>}, welche jeweils eine andere Middleware verwenden, um die Berechtigung des Aufrufern zu überprüfen. Über einen Kontext, der in jeder Prozedur als Parameter übergeben wird, kann ein Prisma-Singleton zur Datenbankabfrage und auf den aktuellen Nutzer zugegriffen werden.
+tRPC ist ein Framework zur Entwicklung von APIs für TypeScript und JavaScript-Anwendungen. Es ermöglicht die einfache Erstellung von API-Endpunkten mit Typsicherheit und automatischer Codegenerierung. Da das Backend, das Frontend und die Next.js-Middleware verschiedene Laufzeiten besitzen, sind verschiedene <kbd>api</kbd> Instanzen notwendig, um den Zugriff auf den <kbd>appRouter</kbd> aus jeder Laufzeit zu gewährleisten. Der <kbd>appRouter</kbd> besteht aus weiteren Subroutern, die jeweils eine Menge an sog. Prozeduren aufweisen. Eine Prozedur ist in dieser Anwendung ein Element aus {<kbd>publicProcedure</kbd>, <kbd>privateProcedure</kbd>, <kbd>adminProcedure</kbd>}, welche jeweils eine andere Middleware verwenden, um die Berechtigung des Aufrufern zu überprüfen. Über einen Kontext, der in jeder Prozedur als Parameter übergeben wird, kann ein Prisma-Singleton zur Datenbankabfrage und auf den aktuellen Nutzer zugegriffen werden. Unterteilt werden Prozeduren in Abfragen (queries), Mutationen (mutations) und 'Abbonemonts' (subscriptions). Zu vergleichen sind Queries mit HTTP-GET-Requests und Mutations mit bspw. HTTP-POST-Requests. Bei Subscriptions handelt es sich um eine Implementierung von WebSockets, welche in diesem Projekt nicht verwendet wurden.
 
 ### 3.4 Zod
 
