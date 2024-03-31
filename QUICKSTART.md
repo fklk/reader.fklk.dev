@@ -43,7 +43,7 @@ Es ist zu empfehlen, die Datenbank in dem sog. Prisma-Studio zu verwalten und ni
 npx prisma db studio
 ```
 
-Das Prisma-Stdio ist unter <kbd>http://localhost:5555</kbd> zu erreichen und startet automatisch den Browser.
+Das Prisma-Studio ist unter <kbd>http://localhost:5555</kbd> zu erreichen und startet automatisch den Browser.
 
 ## Anwendung starten
 
