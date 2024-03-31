@@ -32,7 +32,8 @@ npx prisma db push
 npx prisma db seed
 ```
 
-Das Passwort der erstellten Nutzer ist <kbd>hJoTZZ96K6j9&Ez3ABdA2SWF54\*nchhT</kbd>
+Das Passwort der erstellten Nutzer ist <kbd>hJoTZZ96K6j9&Ez3ABdA2SWF54\*nchhT</kbd> \
+*Erstellte Benutzer: {<kbd>valery</kbd>, <kbd>donald</kbd>, <kbd>ernest</kbd>, <kbd>admin</kbd>}*
 
 ### Datenbank verwalten
 
